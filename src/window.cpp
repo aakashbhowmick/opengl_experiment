@@ -60,9 +60,16 @@ int main()
 
     // Set up vertex data
     float vertices[] = {
-       -0.5f, -0.5f, 0.0f,
+        0.5f,  0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
-        0.0f,  0.5f, 0.0f
+       -0.5f, -0.5f, 0.0f,
+       -0.5f,  0.5f, 0.0f
+    };
+
+    // Triangle indices
+    unsigned int indices[] = {
+        0, 1, 3,
+        1, 2, 3
     };
 
     /* Create a vertex-array object
@@ -91,6 +98,13 @@ int main()
     glVertexAttribPointer(vertex_attribute_id, num_comp, GL_FLOAT, GL_FALSE, stride, start_offset);
     glEnableVertexAttribArray(vertex_attribute_id);
 
+    /* Create an element buffer object (EBO)
+     */
+     GLuint EBO;
+     glGenBuffers(1, &EBO);
+     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 
     // render loop
     while(!glfwWindowShouldClose(window))
@@ -102,10 +116,13 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Draw
+        // Draw elements
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        GLsizei elem_array_size = 6;
+        void* offset = 0;
+        glDrawElements(GL_TRIANGLES, elem_array_size, GL_UNSIGNED_INT, offset);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
