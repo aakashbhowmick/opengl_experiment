@@ -5,6 +5,8 @@
 #include <exception>
 #include <iostream>
 
+#include <Mesh.h>
+
 void processInput(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 GLuint setupShaderProgram();
@@ -14,21 +16,21 @@ const unsigned int SCR_HEIGHT = 600;
 
 const char* vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
-                                 "out vec4 vertexColor;\n"
+                                 "layout (location = 1) in vec3 aColor;\n"
+                                 "out vec3 vertexColor;\n"
                                  "void main()\n"
                                  "{\n"
                                  "    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                 "    vertexColor = vec4(0.5, 0.0, 0.0, 1.0);\n"
+                                 "    vertexColor = aColor;\n"
                                  "}\n\0";
                     
 
 const char* fragmentShaderSource = "#version 330 core\n"
-                                   "in vec4 vertexColor;\n"
+                                   "in vec3 vertexColor;\n"
                                    "out vec4 FragColor;\n"
-                                   "uniform vec4 appColor;\n"
                                    "void main()\n"
                                    "{\n"
-                                   "    FragColor = appColor;\n"
+                                   "    FragColor = vec4(vertexColor, 1.0);\n"
                                    "}\n\0";
 
 
@@ -63,12 +65,14 @@ int main()
     // Compile vertex shader, fragment shader and link to a program
     GLuint shaderProgram = setupShaderProgram();
 
+#define USE_ARRAY 1
+#if USE_ARRAY
     // Set up vertex data
     float vertices[] = {
-        0.5f,  0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-       -0.5f, -0.5f, 0.0f,
-       -0.5f,  0.5f, 0.0f
+        0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+       -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
+       -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f
     };
 
     // Triangle indices
@@ -76,6 +80,12 @@ int main()
         0, 1, 3,
         1, 2, 3
     };
+
+#else
+    Mesh mesh;
+    const float* vertices = mesh.GetVertexPtr();
+    const unsigned int* indices = mesh.GetTriaPtr();
+#endif
 
     /* Create a vertex-array object
      * A VAO stores meta-data about the VBO.
@@ -96,12 +106,18 @@ int main()
     // Copy data to the buffer
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     
-    GLuint vertex_attribute_id = 0;   // I think this has been hardcoded in the shader
-    GLuint num_comp = 3;              // 3 co-ordinates per vertex
-    GLsizei stride = 3*sizeof(float); // Stride size
-    void* start_offset = NULL;        // Offset from start
-    glVertexAttribPointer(vertex_attribute_id, num_comp, GL_FLOAT, GL_FALSE, stride, start_offset);
-    glEnableVertexAttribArray(vertex_attribute_id);
+    GLuint vert_attribute_coord = 0;   
+    GLuint vert_attribute_color = 1;  
+    GLuint coord_comp = 3;              // 3 co-ordinates per vertex
+    GLuint color_comp = 3;              // 3 co-ordinates per color
+    GLsizei stride = 6*sizeof(float);   // Stride size
+    void* coord_offset = NULL;          // Offset from start
+    void* color_offset = (void*)(3*sizeof(float));
+
+    glVertexAttribPointer(vert_attribute_coord, coord_comp, GL_FLOAT, GL_FALSE, stride, (void*)0);
+    glVertexAttribPointer(vert_attribute_color, color_comp, GL_FLOAT, GL_FALSE, stride, (void*)(3*sizeof(float)) );
+    glEnableVertexAttribArray(vert_attribute_coord);
+    glEnableVertexAttribArray(vert_attribute_color);
 
     /* Create an element buffer object (EBO)
      */
@@ -123,12 +139,6 @@ int main()
 
         // Set shader program
         glUseProgram(shaderProgram);
-        
-        // Update uniform 'appColor' as a function of time
-        float timeElapsed = glfwGetTime();
-        float greenValue  = std::sin(timeElapsed) / 2.0f + 0.5f;
-        GLint appColorLocation = glGetUniformLocation(shaderProgram, "appColor");
-        glUniform4f(appColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
         
         // Draw elements
         glBindVertexArray(VAO);
