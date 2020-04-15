@@ -1,8 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <iostream>
+#include <cmath>
 #include <exception>
+#include <iostream>
 
 void processInput(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -24,9 +25,10 @@ const char* vertexShaderSource = "#version 330 core\n"
 const char* fragmentShaderSource = "#version 330 core\n"
                                    "in vec4 vertexColor;\n"
                                    "out vec4 FragColor;\n"
+                                   "uniform vec4 appColor;\n"
                                    "void main()\n"
                                    "{\n"
-                                   "    FragColor = vertexColor;\n"
+                                   "    FragColor = appColor;\n"
                                    "}\n\0";
 
 
@@ -119,8 +121,16 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Draw elements
+        // Set shader program
         glUseProgram(shaderProgram);
+        
+        // Update uniform 'appColor' as a function of time
+        float timeElapsed = glfwGetTime();
+        float greenValue  = std::sin(timeElapsed) / 2.0f + 0.5f;
+        GLint appColorLocation = glGetUniformLocation(shaderProgram, "appColor");
+        glUniform4f(appColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+        
+        // Draw elements
         glBindVertexArray(VAO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         GLsizei elem_array_size = 6;
