@@ -2,9 +2,11 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <exception>
 
 void processInput(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+GLuint setupShaderProgram();
 
 const unsigned int SCR_WIDTH  = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -53,54 +55,8 @@ int main()
         return -1;
     }
 
-    // Compile vertex shader program
-    int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &(vertexShaderSource), NULL);
-    glCompileShader(vertexShader);
-    int success; char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "Vertex shader compilation failed :\n" << infoLog << std::endl;
-    }
-    else
-    {
-        std::cout << "Vertex shader compiled successfully" << std::endl;
-    }
-
-    // Compile fragment shader program
-    int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &(fragmentShaderSource), NULL);
-    glCompileShader(fragmentShader);
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "Fragment shader compilation failed :\n" << infoLog << std::endl;
-    }
-    else
-    {
-        std::cout << "Fragment shader compiled successfully" << std::endl;
-    }
-
-    // Link shaders
-    int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if(!success)
-    {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "Shader program linking failed :\n" << infoLog << std::endl;
-    }
-    else
-    {
-        std::cout << "Shader program linked successfully" << std::endl;
-    }
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    // Compile vertex shader, fragment shader and link to a program
+    GLuint shaderProgram = setupShaderProgram();
 
     // Set up vertex data
     float vertices[] = {
@@ -164,4 +120,64 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     // Resize OpenGL viewport to match window size
     glViewport(0, 0, width, height);
+}
+
+// Compiles vertex and fragment shaders and links them into a shader program.
+// Returns handle to the shader program if successful, exits if unsuccessul.
+GLuint setupShaderProgram()
+{
+    int success;
+    char infoLog[512];
+
+    // Compile vertex shader program
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &(vertexShaderSource), NULL);
+    glCompileShader(vertexShader);
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if(!success)
+    {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "Vertex shader compilation failed :\n" << infoLog << std::endl;
+    }
+    else
+    {
+        std::cout << "Vertex shader compiled successfully" << std::endl;
+    }
+
+    // Compile fragment shader program
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &(fragmentShaderSource), NULL);
+    glCompileShader(fragmentShader);
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if(!success)
+    {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout << "Fragment shader compilation failed :\n" << infoLog << std::endl;
+        std::terminate();
+    }
+    else
+    {
+        std::cout << "Fragment shader compiled successfully" << std::endl;
+    }
+
+    // Link shaders
+    GLuint shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if(!success)
+    {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "Shader program linking failed :\n" << infoLog << std::endl;
+        std::terminate();
+    }
+    else
+    {
+        std::cout << "Shader program linked successfully" << std::endl;
+    }
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    return shaderProgram;
 }
