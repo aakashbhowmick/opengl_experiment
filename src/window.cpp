@@ -65,20 +65,31 @@ int main()
         0.0f,  0.5f, 0.0f
     };
 
-    unsigned int VBO, VAO;
+    /* Create a vertex-array object
+     * A VAO stores meta-data about the VBO.
+     */
+    GLuint VAO;
     glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    // Make this array object the active vertex array
     glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    /* Create a buffer object.
+     * A buffer object is a block of memory for storing data.
+     */
+    // Create a new buffer object
+    GLuint VBO;
+    glGenBuffers(1, &VBO);
+    // Bind the buffer to the active vertex-buffer object
+    glBindBuffer(GL_ARRAY_BUFFER, VBO); 
+    // Copy data to the buffer
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)NULL);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
+    GLuint vertex_attribute_id = 0;   // I think this has been hardcoded in the shader
+    GLuint num_comp = 3;              // 3 co-ordinates per vertex
+    GLsizei stride = 3*sizeof(float); // Stride size
+    void* start_offset = NULL;        // Offset from start
+    glVertexAttribPointer(vertex_attribute_id, num_comp, GL_FLOAT, GL_FALSE, stride, start_offset);
+    glEnableVertexAttribArray(vertex_attribute_id);
 
 
     // render loop
