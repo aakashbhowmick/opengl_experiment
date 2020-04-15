@@ -65,27 +65,13 @@ int main()
     // Compile vertex shader, fragment shader and link to a program
     GLuint shaderProgram = setupShaderProgram();
 
-#define USE_ARRAY 1
-#if USE_ARRAY
-    // Set up vertex data
-    float vertices[] = {
-        0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-       -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
-       -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f
-    };
-
-    // Triangle indices
-    unsigned int indices[] = {
-        0, 1, 3,
-        1, 2, 3
-    };
-
-#else
+    // Load mesh data
     Mesh mesh;
+    mesh.Print();
     const float* vertices = mesh.GetVertexPtr();
     const unsigned int* indices = mesh.GetTriaPtr();
-#endif
+    size_t vertex_size = mesh.GetVertexSizeBytes();
+    size_t index_size  = mesh.GetTriaSizeBytes();
 
     /* Create a vertex-array object
      * A VAO stores meta-data about the VBO.
@@ -104,7 +90,7 @@ int main()
     // Bind the buffer to the active vertex-buffer object
     glBindBuffer(GL_ARRAY_BUFFER, VBO); 
     // Copy data to the buffer
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertex_size, vertices, GL_STATIC_DRAW);
     
     GLuint vert_attribute_coord = 0;   
     GLuint vert_attribute_color = 1;  
@@ -124,7 +110,7 @@ int main()
      GLuint EBO;
      glGenBuffers(1, &EBO);
      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+     glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_size, indices, GL_STATIC_DRAW);
 
 
     // render loop
