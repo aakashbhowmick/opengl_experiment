@@ -6,32 +6,14 @@
 #include <iostream>
 
 #include <Mesh.h>
+#include <Shader.h>
 
 void processInput(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-GLuint setupShaderProgram();
 
 const unsigned int SCR_WIDTH  = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-const char* vertexShaderSource = "#version 330 core\n"
-                                 "layout (location = 0) in vec3 aPos;\n"
-                                 "layout (location = 1) in vec3 aColor;\n"
-                                 "out vec3 vertexColor;\n"
-                                 "void main()\n"
-                                 "{\n"
-                                 "    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                 "    vertexColor = aColor;\n"
-                                 "}\n\0";
-                    
-
-const char* fragmentShaderSource = "#version 330 core\n"
-                                   "in vec3 vertexColor;\n"
-                                   "out vec4 FragColor;\n"
-                                   "void main()\n"
-                                   "{\n"
-                                   "    FragColor = vec4(vertexColor, 1.0);\n"
-                                   "}\n\0";
 
 
 //**** MAIN *****
@@ -62,8 +44,11 @@ int main()
         return -1;
     }
 
-    // Compile vertex shader, fragment shader and link to a program
-    GLuint shaderProgram = setupShaderProgram();
+    // Load, compile and link shaders
+    const char* vshader_path = "/home/aakash/Code/opengl_experiment/shaders/vertex_shader1.vs";
+    const char* fshader_path = "/home/aakash/Code/opengl_experiment/shaders/fragment_shader1.fs";
+    Shader shader(vshader_path, fshader_path);
+    shader.use();
 
     // Load mesh data
     Mesh mesh;
@@ -125,7 +110,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Set shader program
-        glUseProgram(shaderProgram);
+        //glUseProgram(shaderProgram);
         
         // Draw elements
         glBindVertexArray(VAO);
@@ -160,62 +145,3 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-// Compiles vertex and fragment shaders and links them into a shader program.
-// Returns handle to the shader program if successful, exits if unsuccessul.
-GLuint setupShaderProgram()
-{
-    int success;
-    char infoLog[512];
-
-    // Compile vertex shader program
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &(vertexShaderSource), NULL);
-    glCompileShader(vertexShader);
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "Vertex shader compilation failed :\n" << infoLog << std::endl;
-    }
-    else
-    {
-        std::cout << "Vertex shader compiled successfully" << std::endl;
-    }
-
-    // Compile fragment shader program
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &(fragmentShaderSource), NULL);
-    glCompileShader(fragmentShader);
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "Fragment shader compilation failed :\n" << infoLog << std::endl;
-        std::terminate();
-    }
-    else
-    {
-        std::cout << "Fragment shader compiled successfully" << std::endl;
-    }
-
-    // Link shaders
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if(!success)
-    {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "Shader program linking failed :\n" << infoLog << std::endl;
-        std::terminate();
-    }
-    else
-    {
-        std::cout << "Shader program linked successfully" << std::endl;
-    }
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    return shaderProgram;
-}
