@@ -1,6 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <cmath>
 #include <exception>
 #include <iostream>
@@ -49,6 +53,9 @@ int main()
     const char* fshader_path = "/home/aakash/Code/opengl_experiment/shaders/fragment_shader1.fs";
     Shader shader(vshader_path, fshader_path);
     shader.use();
+    glm::mat4 transform_mat(1.0f);
+    transform_mat = glm::rotate(transform_mat, glm::radians(30.0f), glm::vec3(0.0f, 0.0f, 0.1f));
+    shader.setMat4f("vertex_transform", transform_mat);
 
     // Load mesh data
     Mesh mesh;
