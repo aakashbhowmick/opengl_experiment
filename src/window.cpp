@@ -18,6 +18,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 const unsigned int SCR_WIDTH  = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+float rot_degrees = 0.0f;
+
 
 
 //**** MAIN *****
@@ -54,7 +56,6 @@ int main()
     Shader shader(vshader_path, fshader_path);
     shader.use();
     glm::mat4 transform_mat(1.0f);
-    transform_mat = glm::rotate(transform_mat, glm::radians(30.0f), glm::vec3(0.0f, 0.0f, 0.1f));
     shader.setMat4f("vertex_transform", transform_mat);
 
     // Load mesh data
@@ -116,9 +117,10 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Set shader program
-        //glUseProgram(shaderProgram);
-        
+        // Update transformation matrix in shader
+        transform_mat = glm::rotate(glm::mat4(1.0f), glm::radians(rot_degrees), glm::vec3(0.0f, 0.0f, 0.1f));
+        shader.setMat4f("vertex_transform", transform_mat);
+
         // Draw elements
         glBindVertexArray(VAO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -142,7 +144,19 @@ int main()
 void processInput(GLFWwindow* window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
         glfwSetWindowShouldClose(window, true);
+    }
+    else if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        rot_degrees += 0.5f;
+        std::cout << "rot_degrees : " <<  rot_degrees << std::endl;
+    }
+    else if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        rot_degrees -= 0.5f;
+        std::cout << "rot_degrees : " <<  rot_degrees << std::endl;
+    }
 }
 
 // Callback : When window is resized
