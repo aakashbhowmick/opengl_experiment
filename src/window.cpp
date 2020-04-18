@@ -50,13 +50,21 @@ int main()
         return -1;
     }
 
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 view = glm::mat4(1.0f);
+    glm::mat4 projection;
+    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    projection = glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 0.1f, 100.0f);
+
     // Load, compile and link shaders
     const char* vshader_path = "/home/aakash/Code/opengl_experiment/shaders/vertex_shader1.vs";
     const char* fshader_path = "/home/aakash/Code/opengl_experiment/shaders/fragment_shader1.fs";
     Shader shader(vshader_path, fshader_path);
     shader.use();
-    glm::mat4 transform_mat(1.0f);
-    shader.setMat4f("vertex_transform", transform_mat);
+    shader.setMat4f("model", model);
+    shader.setMat4f("view", view);
+    shader.setMat4f("projection", projection);
 
     // Load mesh data
     Mesh mesh;
@@ -118,8 +126,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Update transformation matrix in shader
-        transform_mat = glm::rotate(glm::mat4(1.0f), glm::radians(rot_degrees), glm::vec3(0.0f, 0.0f, 0.1f));
-        shader.setMat4f("vertex_transform", transform_mat);
+        //transform_mat = glm::rotate(glm::mat4(1.0f), glm::radians(rot_degrees), glm::vec3(0.0f, 0.0f, 0.1f));
+        //shader.setMat4f("vertex_transform", transform_mat);
 
         // Draw elements
         glBindVertexArray(VAO);
