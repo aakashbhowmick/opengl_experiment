@@ -53,9 +53,10 @@ int main()
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 projection;
-    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(rot_degrees), glm::vec3(1.0f, 0.0f, 0.0f));
     view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-    projection = glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 0.1f, 100.0f);
+    float fov_degree = 45.0f;
+    projection = glm::perspective(glm::radians(fov_degree), 800.0f/600.0f, 0.1f, 100.0f);
 
     // Load, compile and link shaders
     const char* vshader_path = "/home/aakash/Code/opengl_experiment/shaders/vertex_shader1.vs";
@@ -114,6 +115,11 @@ int main()
      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
      glBufferData(GL_ELEMENT_ARRAY_BUFFER, tria_array_size, tria_array, GL_STATIC_DRAW);
 
+    /* Enable depth testing.This allows objects behind other objects 
+     * to get hidden.
+     */
+     glEnable(GL_DEPTH_TEST);
+
 
     // render loop
     while(!glfwWindowShouldClose(window))
@@ -121,13 +127,16 @@ int main()
         // Check if any input was received from the user
         processInput(window);
 
-        // Render
+        // Set background color.
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Clear buffers from last render iteration, otherwise
+        // it will be re-used.
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Update transformation matrix in shader
-        //transform_mat = glm::rotate(glm::mat4(1.0f), glm::radians(rot_degrees), glm::vec3(0.0f, 0.0f, 0.1f));
-        //shader.setMat4f("vertex_transform", transform_mat);
+    model = glm::rotate(glm::mat4(1.0f), glm::radians(rot_degrees), glm::vec3(1.0f, 0.0f, 0.0f));
+        shader.setMat4f("model", model);
 
         // Draw elements
         glBindVertexArray(VAO);
