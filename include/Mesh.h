@@ -64,23 +64,12 @@ struct Triangle
 class Mesh
 {
 public:
-    Mesh()
+    Mesh(const std::vector<VertexRecord>& vertex_list,
+         const std::vector<Triangle>& triangle_list):
+         vertices_{vertex_list},
+         triangles_{triangle_list}
     {
     }
-
-    void Load()
-    {
-        vertices_.resize(4);
-        vertices_[0]  =  { 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f };
-        vertices_[1]  =  { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f };
-        vertices_[2]  =  {-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
-        vertices_[3]  =  {-0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f };
-
-        triangles_.resize(2);
-        triangles_[0] = { 0, 1, 3 };
-        triangles_[1] = { 1, 2, 3 };
-    }
-    
 
     const float* GetVertexPtr() const
     {
@@ -107,7 +96,7 @@ public:
     void Print() const 
     {
         std::cout << "Printing mesh data :" << std::endl;
-
+        std::cout << "Vertices :";
         for(size_t i=0; i < vertices_.size(); ++i)
             std::cout << vertices_[i].xyzrgb[0] << " "
                       << vertices_[i].xyzrgb[1] << " "
@@ -116,6 +105,7 @@ public:
                       << vertices_[i].xyzrgb[4] << " "
                       << vertices_[i].xyzrgb[5] << std::endl;
 
+        std::cout << "Triangles:";
         for(size_t i=0; i < triangles_.size(); ++i)
             std::cout << triangles_[i].indices[0] << " "
                       << triangles_[i].indices[1] << " "
@@ -125,8 +115,8 @@ public:
 
 
 private:
-    std::vector<VertexRecord>    vertices_;
-    std::vector<Triangle> triangles_;
+    std::vector<VertexRecord> vertices_;
+    std::vector<Triangle>     triangles_;
 };
 
 #endif

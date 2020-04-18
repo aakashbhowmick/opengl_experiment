@@ -8,9 +8,11 @@
 #include <cmath>
 #include <exception>
 #include <iostream>
+#include <memory>
 
 #include <Mesh.h>
 #include <Shader.h>
+#include <BasicShapes.h>
 
 void processInput(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -68,13 +70,12 @@ int main()
     shader.setMat4f("projection", projection);
 
     // Load mesh data
-    Mesh mesh;
-    mesh.Load();
-    mesh.Print();
-    const float* vertex_array = mesh.GetVertexPtr();
-    size_t vertex_array_size = mesh.GetVertexSizeBytes();
-    const unsigned int* tria_array = mesh.GetTriaPtr();
-    size_t tria_array_size = mesh.GetTriaSizeBytes();
+    std::unique_ptr<Mesh> mesh(BasicShapes::CreateTriangle());
+    mesh->Print();
+    const float* vertex_array = mesh->GetVertexPtr();
+    size_t vertex_array_size = mesh->GetVertexSizeBytes();
+    const unsigned int* tria_array = mesh->GetTriaPtr();
+    size_t tria_array_size = mesh->GetTriaSizeBytes();
 
     /* Create a vertex-array object
      * A VAO stores meta-data about the VBO.
