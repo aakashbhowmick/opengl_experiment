@@ -1,7 +1,12 @@
+#ifndef __OPEN_GL_EXPERIMENTS_BASIC_SHAPES__
+#define __OPEN_GL_EXPERIMENTS_BASIC_SHAPES__
+
 #include <Mesh.h>
 #include <vector>
 
-class BasicShapes
+/* Class for generating basic primitive shapes.
+ */
+class BasicShapes 
 {
 public:
 
@@ -69,3 +74,5 @@ public:
         return new Mesh(vertices, triangles);
     }
 };
+
+#endif
