@@ -14,8 +14,12 @@
 #include <Shader.h>
 #include <BasicShapes.h>
 
+typedef void (*WindowResizeCallback)(GLFWwindow* , int , int );
+
+// Function forward declarations
 void processInput(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+GLFWwindow* initializeGLFW( unsigned int window_width, unsigned int window_height, const std::string& window_title, WindowResizeCallback callback);
 
 const unsigned int SCR_WIDTH  = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -23,27 +27,11 @@ const unsigned int SCR_HEIGHT = 600;
 float rot_degrees = 0.0f;
 
 
-
 //**** MAIN *****
 int main()
 {
-    // glfw initialization
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    // glfw window creation
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGLExperiment", NULL, NULL);
-
-    if (window == NULL)
-    {
-        std::cout << "Failed to create window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    // Initialize GLFW window
+    GLFWwindow* window = initializeGLFW(SCR_WIDTH, SCR_HEIGHT, "OpenGLExperiment", &(framebuffer_size_callback));
 
     // Ask GLAD to load all OpenGL function pointers
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -156,6 +144,35 @@ int main()
     
     glfwTerminate();
     return 0;
+}
+
+// Initializes a GLFW window.
+// Returns NULL on failure.
+GLFWwindow* initializeGLFW(
+                unsigned int window_width,
+                unsigned int window_height,
+                const std::string& window_title,
+                WindowResizeCallback callback)
+                
+{
+    // glfw initialization
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    // glfw window creation
+    GLFWwindow* window = glfwCreateWindow(window_width, window_height, window_title.c_str(), NULL, NULL);
+
+    if (window == NULL)
+    {
+        std::cout << "Failed to create window" << std::endl;
+        glfwTerminate();
+        return NULL;
+    }
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, callback);
+    return window;
 }
 
 // Callback : When a key is pressed
