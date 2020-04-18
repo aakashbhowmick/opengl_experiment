@@ -20,6 +20,7 @@ typedef void (*WindowResizeCallback)(GLFWwindow* , int , int );
 void processInput(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 GLFWwindow* initializeGLFW( unsigned int window_width, unsigned int window_height, const std::string& window_title, WindowResizeCallback callback);
+void RenderLoop( GLFWwindow* window, GLuint VAO, GLuint EBO, Shader& shader);
 
 const unsigned int SCR_WIDTH  = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -109,41 +110,15 @@ int main()
      */
      glEnable(GL_DEPTH_TEST);
 
+     // Rendering loop
+     RenderLoop( window, VAO, EBO, shader);
 
-    // render loop
-    while(!glfwWindowShouldClose(window))
-    {
-        // Check if any input was received from the user
-        processInput(window);
-
-        // Set background color.
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-
-        // Clear buffers from last render iteration, otherwise
-        // it will be re-used.
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // Update transformation matrix in shader
-    model = glm::rotate(glm::mat4(1.0f), glm::radians(rot_degrees), glm::vec3(1.0f, 0.0f, 0.0f));
-        shader.setMat4f("model", model);
-
-        // Draw elements
-        glBindVertexArray(VAO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        GLsizei elem_array_size = 6;
-        void* offset = 0;
-        glDrawElements(GL_TRIANGLES, elem_array_size, GL_UNSIGNED_INT, offset);
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    // Deallocate resources
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+     // Deallocate resources
+     glDeleteVertexArrays(1, &VAO);
+     glDeleteBuffers(1, &VBO);
     
-    glfwTerminate();
-    return 0;
+     glfwTerminate();
+     return 0;
 }
 
 // Initializes a GLFW window.
@@ -173,6 +148,42 @@ GLFWwindow* initializeGLFW(
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, callback);
     return window;
+}
+
+// Rendering loop
+void RenderLoop(
+        GLFWwindow* window,
+        GLuint VAO,
+        GLuint EBO,
+        Shader& shader)
+{
+    // render loop
+    while(!glfwWindowShouldClose(window))
+    {
+        // Check if any input was received from the user
+        processInput(window);
+
+        // Set background color.
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+        // Clear buffers from last render iteration, otherwise
+        // it will be re-used.
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Update transformation matrix in shader
+        glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(rot_degrees), glm::vec3(1.0f, 0.0f, 0.0f));
+        shader.setMat4f("model", model);
+
+        // Draw elements
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        GLsizei elem_array_size = 6;
+        void* offset = 0;
+        glDrawElements(GL_TRIANGLES, elem_array_size, GL_UNSIGNED_INT, offset);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
 }
 
 // Callback : When a key is pressed
