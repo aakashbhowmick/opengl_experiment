@@ -12,6 +12,7 @@ set(SYSTEM_INCLUDE_PATH "/usr/local/include")
 # List of source files
 set (SOURCE_LIST 
      "src/window.cpp"
+     "src/World.cpp"
      "src/glad.c")
 
 # List of target dependencies

@@ -10,6 +10,7 @@
 #include <iostream>
 #include <memory>
 
+#include <World.h>
 #include <Mesh.h>
 #include <Shader.h>
 #include <BasicShapes.h>
@@ -59,12 +60,13 @@ int main()
     shader.setMat4f("projection", projection);
 
     // Load mesh data
-    std::unique_ptr<Mesh> mesh(BasicShapes::CreateTriangle());
-    mesh->Print();
-    const float* vertex_array = mesh->GetVertexPtr();
-    size_t vertex_array_size = mesh->GetVertexSizeBytes();
-    const unsigned int* tria_array = mesh->GetTriaPtr();
-    size_t tria_array_size = mesh->GetTriaSizeBytes();
+    World* the_world = World::GetWorld();
+    the_world->AddObject(BasicShapes::CreateTriangle());
+    the_world->Print();
+    const float* vertex_array = the_world->GetVertexArrayPtr();
+    size_t vertex_array_size = the_world->GetVertexArraySizeBytes();
+    const unsigned int* tria_array = the_world->GetElementArrayPtr();
+    size_t tria_array_size = the_world->GetElementArraySizeBytes();
 
     /* Create a vertex-array object
      * A VAO stores meta-data about the VBO.
