@@ -61,7 +61,7 @@ int main()
 
     // Load mesh data
     World* the_world = World::GetPtr();
-    the_world->AddObject(BasicShapes::CreateTriangle());
+    the_world->AddObject(BasicShapes::CreateCube(0.5));
     the_world->Print();
     const float* vertex_array = the_world->GetVertexArrayPtr();
     size_t vertex_array_size = the_world->GetVertexArraySizeBytes();
