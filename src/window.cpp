@@ -62,6 +62,7 @@ int main(int argc, char**argv)
         std::cout << "Turning on fill mode" << std::endl;
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
+    glEnable(GL_DEPTH_TEST);  // Enable depth testing
 
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::mat4(1.0f);
@@ -103,7 +104,7 @@ int main(int argc, char**argv)
     // Create a new buffer object
     GLuint VBO;
     glGenBuffers(1, &VBO);
-    // Bind the buffer to the active vertex-buffer object
+    // Bind the buffer to the active vertex array object
     glBindBuffer(GL_ARRAY_BUFFER, VBO); 
     // Copy data to the buffer
     glBufferData(GL_ARRAY_BUFFER, vertex_array_size, vertex_array, GL_STATIC_DRAW);
@@ -128,10 +129,6 @@ int main(int argc, char**argv)
      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
      glBufferData(GL_ELEMENT_ARRAY_BUFFER, tria_array_size, tria_array, GL_STATIC_DRAW);
 
-    /* Enable depth testing.This allows objects behind other objects 
-     * to get hidden.
-     */
-     glEnable(GL_DEPTH_TEST);
 
      // Rendering loop
      RenderLoop( window, VAO, EBO, shader);
