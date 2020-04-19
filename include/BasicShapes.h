@@ -31,7 +31,7 @@ public:
         vertex_color[2].Set(0.0f, 0.0f, 1.0f );
 
         triangles.resize(1);
-        triangles[0] = { 0, 1, 2 };
+        triangles[0].Set( 0, 1, 2 );
 
         return new Mesh(vertices, vertex_color, triangles);
     }
@@ -56,8 +56,8 @@ public:
         color[3].Set( 1.0f, 0.0f, 0.0f );
 
         triangles.resize(2);
-        triangles[0] = { 0, 1, 3 };
-        triangles[1] = { 1, 2, 3 };
+        triangles[0].Set( 0, 1, 3 );
+        triangles[1].Set( 1, 2, 3 );
 
         return new Mesh(vertices, color, triangles);
     }
@@ -107,18 +107,18 @@ public:
 
 
         triangles.resize(12);
-        triangles[0] = { 0, 1, 3 };
-        triangles[1] = { 1, 2, 3 };
-        triangles[2] = { 1, 5, 2 };
-        triangles[3] = { 2, 5, 6 };
-        triangles[4] = { 0, 3, 4 };
-        triangles[5] = { 4, 3, 7 };
-        triangles[6] = { 0, 4, 1 };
-        triangles[7] = { 1, 4, 5 };
-        triangles[8] = { 2, 6, 3 };
-        triangles[9] = { 3, 6, 7 };
-        triangles[10] = { 4, 6, 5 };
-        triangles[11] = { 6, 4, 7 };
+        triangles[0].Set( 0, 1, 3 );
+        triangles[1].Set( 1, 2, 3 );
+        triangles[2].Set( 1, 5, 2 );
+        triangles[3].Set( 2, 5, 6 );
+        triangles[4].Set( 0, 3, 4 );
+        triangles[5].Set( 4, 3, 7 );
+        triangles[6].Set( 0, 4, 1 );
+        triangles[7].Set( 1, 4, 5 );
+        triangles[8].Set( 2, 6, 3 );
+        triangles[9].Set( 3, 6, 7 );
+        triangles[10].Set( 4, 6, 5 );
+        triangles[11].Set( 6, 4, 7 );
 
         return new Mesh(vertices, color, triangles);
     }

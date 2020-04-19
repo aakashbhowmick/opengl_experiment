@@ -107,4 +107,5 @@ struct Vect3
 
 using Vect3f = Vect3<float>;
 using Vect3i = Vect3<unsigned int>;
+using Triangle = Vect3i;
 #endif

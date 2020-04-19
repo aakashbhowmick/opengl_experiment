@@ -23,17 +23,6 @@ struct Vertex
 } __attribute__((packed));
 
 
-// Triangle 
-struct Triangle
-{
-    unsigned int indices[3];
-
-    void operator= (const unsigned int* index)
-    {
-        indices[0] = index[0]; indices[1] = index[1];  indices[2] = index[2]; 
-    }
-};
-
 /**
  * Mesh class
  */
