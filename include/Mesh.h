@@ -4,41 +4,43 @@
 #include <vector>
 #include <cstring>
 #include <iostream>
+#include <cassert>
 
-// Point 
-struct Point
+// Vertex 
+struct Vertex 
 {
     float xyz[3];
+
+    void operator=(const float* array3f)
+    {
+        xyz[0]=array3f[0]; xyz[1]=array3f[1]; xyz[2]=array3f[2];
+    }
+
 };
 
 // Color
 struct Color
 {
     float rgb[3];
+
+    void operator=(const float* array3f)
+    {
+        rgb[0]=array3f[0]; rgb[1]=array3f[1]; rgb[2]=array3f[2];
+    }
 };
 
-// Vertex
+// VertexRecord
 struct VertexRecord
 {
     float xyzrgb[6];
 
-    const VertexRecord& operator= (const VertexRecord& other)
+    VertexRecord(const Vertex& v, const Color& c)
     {
-        CopyArray(other.xyzrgb);
-        return *this;
+        xyzrgb[0] = v.xyz[0]; xyzrgb[1] = v.xyz[1]; xyzrgb[2] = v.xyz[2];
+        xyzrgb[3] = c.rgb[0]; xyzrgb[4] = c.rgb[1]; xyzrgb[5] = c.rgb[2];
     }
 
-    const VertexRecord& operator= (const float* xyz_rgb)
-    {
-        CopyArray(xyz_rgb);
-        return *this;
-    }
-
-    void CopyArray(const float* xyz_rgb)
-    {
-        memcpy(xyzrgb, xyz_rgb, sizeof(float)*6);
-    }
-};
+} __attribute__((packed));
 
 
 // Triangle 
@@ -46,15 +48,9 @@ struct Triangle
 {
     unsigned int indices[3];
 
-    const Triangle& operator= (const unsigned int* index)
+    void operator= (const unsigned int* index)
     {
-        CopyArray(index);
-        return *this;
-    }
-
-    void CopyArray(const unsigned int* index)
-    {
-        memcpy(indices, index, sizeof(unsigned int)*3);
+        indices[0] = index[0]; indices[1] = index[1];  indices[2] = index[2]; 
     }
 };
 
@@ -64,11 +60,19 @@ struct Triangle
 class Mesh
 {
 public:
-    Mesh(const std::vector<VertexRecord>& vertex_list,
-         const std::vector<Triangle>& triangle_list):
-         vertices_{vertex_list},
+    Mesh(const std::vector<Vertex>&    vertex_list,
+         const std::vector<Color>&     vertex_color,
+         const std::vector<Triangle>&  triangle_list):
          triangles_{triangle_list}
     {
+        assert(vertex_list.size() == vertex_color.size());
+
+        // Merge vertex and color list
+        vertices_.reserve(vertex_list.size());
+        for(size_t i=0; i < vertex_list.size(); ++i)
+        {
+            vertices_.emplace_back(vertex_list[i], vertex_color[i]);
+        }
     }
 
     const std::vector<VertexRecord>& GetVertices() const
