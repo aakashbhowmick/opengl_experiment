@@ -28,6 +28,7 @@ const unsigned int SCR_WIDTH  = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 float rot_degrees = 0.0f;
+float z_trans     = -3.0f;
 
 struct CommandLineOptions
 {
@@ -68,7 +69,7 @@ int main(int argc, char**argv)
     glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 projection;
     model = glm::rotate(model, glm::radians(rot_degrees), glm::vec3(1.0f, 0.0f, 0.0f));
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, z_trans));
     float fov_degree = 45.0f;
     projection = glm::perspective(glm::radians(fov_degree), 800.0f/600.0f, 0.1f, 100.0f);
 
@@ -201,7 +202,9 @@ void RenderLoop(
 
         // Update transformation matrix in shader
         glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(rot_degrees), glm::vec3(1.0f, 0.0f, 0.0f));
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, z_trans));
         shader.setMat4f("model", model);
+        shader.setMat4f("view", view);
 
         // Draw elements
         glBindVertexArray(VAO);
@@ -231,6 +234,16 @@ void processInput(GLFWwindow* window)
     {
         rot_degrees -= 0.5f;
         std::cout << "rot_degrees : " <<  rot_degrees << std::endl;
+    }
+    else if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        z_trans += 0.1;
+        std::cout << "z_trans : " <<  z_trans << std::endl;
+    }
+    else if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        z_trans -= 0.1;
+        std::cout << "z_trans : " <<  z_trans << std::endl;
     }
 }
 
