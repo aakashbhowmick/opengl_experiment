@@ -4,6 +4,8 @@
 #include <Mesh.h>
 #include <vector>
 
+#include <glm/glm.hpp>
+
 /* Class for generating basic primitive shapes.
  */
 class BasicShapes 
@@ -45,7 +47,9 @@ public:
     }
 
     /* Cube */
-    static Mesh* CreateCube(float size)
+    static Mesh* CreateCube(
+        float size,
+        glm::vec3 center)
     {
         //     
         //    7   +--------+ 6
@@ -63,15 +67,15 @@ public:
         vertices.resize(8);
         float l = size/2.0f;
 
-        vertices[0]  =  { -l,  -l,  l, 1.0f, 0.0f, 0.0f };
-        vertices[1]  =  {  l,  -l,  l, 0.0f, 1.0f, 0.0f };
-        vertices[2]  =  {  l,   l,  l, 0.0f, 0.0f, 1.0f };
-        vertices[3]  =  { -l,   l,  l, 1.0f, 1.0f, 1.0f };
+        vertices[0]  =  { center.x-l,  center.y-l,  center.z+l, 1.0f, 0.0f, 0.0f };
+        vertices[1]  =  { center.x+l,  center.y-l,  center.z+l, 0.0f, 1.0f, 0.0f };
+        vertices[2]  =  { center.x+l,  center.y+l,  center.z+l, 0.0f, 0.0f, 1.0f };
+        vertices[3]  =  { center.x-l,  center.y+l,  center.z+l, 1.0f, 1.0f, 1.0f };
 
-        vertices[4]  =  { -l,  -l,  -l, 0.5f, 0.3f, 0.1f };
-        vertices[5]  =  {  l,  -l,  -l, 0.3f, 2.0f, 0.8f };
-        vertices[6]  =  {  l,   l,  -l, 0.0f, 0.4f, 1.0f };
-        vertices[7]  =  { -l,   l,  -l, 0.5f, 0.3f, 0.8f };
+        vertices[4]  =  { center.x-l,  center.y-l,  center.z-l, 0.5f, 0.3f, 0.1f };
+        vertices[5]  =  { center.x+l,  center.y-l,  center.z-l, 0.3f, 2.0f, 0.8f };
+        vertices[6]  =  { center.x+l,  center.y+l,  center.z-l, 0.0f, 0.4f, 1.0f };
+        vertices[7]  =  { center.x-l,  center.y+l,  center.z-l, 0.5f, 0.3f, 0.8f };
 
 
         triangles.resize(12);
