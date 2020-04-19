@@ -88,13 +88,21 @@ private:
 
     void UpdateArrays_(Mesh* mesh)
     {
-        const std::vector<Vertex>& new_vertices = mesh->GetVertices();
-        const std::vector<Triangle>&     new_elements = mesh->GetTriangles();
+        const std::vector<Vertex>&   verts = mesh->GetVertices();
+        const std::vector<Triangle>& trias = mesh->GetTriangles();
 
-        // TODO: Compute normals
+        std::vector<Vect3f> vert_normals(verts.size());
+        for(size_t i=0; i < trias.size(); ++i)
+        {
+            Vect3f normal = (verts[trias[i][2]].pos - verts[trias[i][1]].pos) * (verts[trias[i][1]].pos - verts[trias[i][0]].pos).normalize();
+            for(size_t j=0; j < 3; ++j)
+                vert_normals[ trias[i][j] ] += normal;
+        }
+        for(size_t i=0; i < vert_normals.size(); ++i)
+            vert_normals[i].normalize();
 
-        all_vertices_.insert(all_vertices_.end(), new_vertices.begin(), new_vertices.end());
-        all_elements_.insert(all_elements_.end(), new_elements.begin(), new_elements.end());
+        all_vertices_.insert(all_vertices_.end(), verts.begin(), verts.end());
+        all_elements_.insert(all_elements_.end(), trias.begin(), trias.end());
     }
 
 private:

@@ -23,6 +23,16 @@ struct Vect3
         xyz[0]=v.xyz[0]; xyz[1]=v.xyz[1]; xyz[2]=v.xyz[2]; 
     }
 
+    T& operator[](size_t i)
+    {
+        return xyz[i];
+    }
+
+    const T& operator[](size_t i) const
+    {
+        return xyz[i];
+    }
+
     Vect3& operator=(const T* array3f)
     {
         xyz[0]=array3f[0]; xyz[1]=array3f[1]; xyz[2]=array3f[2];
@@ -42,22 +52,35 @@ struct Vect3
 
     Vect3 operator+(const Vect3& other) const
     {
-        Vect3 v;
+        Vect3 v(*this);
         v += other;
         return v;
     }
 
     Vect3 operator-(const Vect3& other) const
     {
-        Vect3 v;
+        Vect3 v(*this);
         v -= other;
         return v;
     }
 
     Vect3 operator*(const T& a) const
     {
-        Vect3 v;
+        Vect3 v(*this);
         v *= a;
+        return v;
+    }
+
+    Vect3 operator*(const Vect3& v) const
+    {
+        Vect3 u(*this);
+        return u.cross(v);
+    }
+
+    Vect3 operator/(const T& a) const
+    {
+        Vect3 v(*this);
+        v /= a;
         return v;
     }
     
@@ -76,6 +99,12 @@ struct Vect3
     Vect3& operator*=(const T& a)
     {
         xyz[0] *= a; xyz[1] *= a; xyz[2] *= a;
+        return *this;
+    }
+
+    Vect3& operator/=(const T& a)
+    {
+        xyz[0] /= a; xyz[1] /= a; xyz[2] /= a;
         return *this;
     }
 
@@ -101,6 +130,12 @@ struct Vect3
     T norm() const
     {
         return std::sqrt(norm2());
+    }
+
+    Vect3 normalize()
+    {
+        *this /= norm();
+        return *this;
     }
 
 } __attribute__((packed));
