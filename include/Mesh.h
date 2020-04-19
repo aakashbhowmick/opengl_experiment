@@ -12,10 +12,10 @@
 // Vertex
 struct Vertex
 {
-    Vect3 pos;
-    Vect3 color;
+    Vect3f pos;
+    Vect3f color;
 
-    Vertex(const Vect3& p, const Vect3& c):
+    Vertex(const Vect3f& p, const Vect3f& c):
       pos{p}, color{c}
     {
     }
@@ -40,8 +40,8 @@ struct Triangle
 class Mesh
 {
 public:
-    Mesh(const std::vector<Vect3>&    vertex_list,
-         const std::vector<Vect3>&     vertex_color,
+    Mesh(const std::vector<Vect3f>&    vertex_list,
+         const std::vector<Vect3f>&     vertex_color,
          const std::vector<Triangle>&  triangle_list):
          triangles_{triangle_list}
     {

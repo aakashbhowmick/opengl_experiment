@@ -8,9 +8,10 @@
 #include <vector>
 
 // Vect3 
+template <typename T>
 struct Vect3 
 {
-    float xyz[3];
+    T xyz[3];
 
     Vect3()
     {
@@ -22,13 +23,13 @@ struct Vect3
         xyz[0]=v.xyz[0]; xyz[1]=v.xyz[1]; xyz[2]=v.xyz[2]; 
     }
 
-    Vect3& operator=(const float* array3f)
+    Vect3& operator=(const T* array3f)
     {
         xyz[0]=array3f[0]; xyz[1]=array3f[1]; xyz[2]=array3f[2];
         return *this;
     }
 
-    void Set(float x, float y, float z)
+    void Set(T x, T y, T z)
     {
         xyz[0] = x; xyz[1] = y; xyz[2] = z; 
     }
@@ -53,7 +54,7 @@ struct Vect3
         return v;
     }
 
-    Vect3 operator*(const float& a) const
+    Vect3 operator*(const T& a) const
     {
         Vect3 v;
         v *= a;
@@ -72,13 +73,13 @@ struct Vect3
         return *this;
     }
 
-    Vect3& operator*=(const float& a)
+    Vect3& operator*=(const T& a)
     {
         xyz[0] *= a; xyz[1] *= a; xyz[2] *= a;
         return *this;
     }
 
-    float dot(const Vect3& v) const
+    T dot(const Vect3& v) const
     {
         return xyz[0]*v.xyz[0] + xyz[1]*v.xyz[1] + xyz[2]*v.xyz[2];
     }
@@ -92,16 +93,18 @@ struct Vect3
         return c;
     }
 
-    float norm2() const
+    T norm2() const
     {
         return (xyz[0] * xyz[0] + xyz[1]*xyz[1] + xyz[2]*xyz[2]);
     }
 
-    float norm() const
+    T norm() const
     {
         return std::sqrt(norm2());
     }
 
 } __attribute__((packed));
 
+using Vect3f = Vect3<float>;
+using Vect3i = Vect3<unsigned int>;
 #endif

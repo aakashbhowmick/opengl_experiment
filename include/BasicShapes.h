@@ -16,8 +16,8 @@ public:
     /* Triangle */
     static Mesh* CreateTriangle()
     {
-        std::vector<Vect3>    vertices;
-        std::vector<Vect3>     vertex_color;
+        std::vector<Vect3f>    vertices;
+        std::vector<Vect3f>     vertex_color;
         std::vector<Triangle>  triangles;
 
         vertices.resize(3);
@@ -39,8 +39,8 @@ public:
     /* Square */
     static Mesh* CreateSquare()
     {
-        std::vector<Vect3>   vertices;
-        std::vector<Vect3>   color;
+        std::vector<Vect3f>   vertices;
+        std::vector<Vect3f>   color;
         std::vector<Triangle> triangles;
 
         vertices.resize(4);
@@ -78,8 +78,8 @@ public:
         //   +---------+ 
         // 0           1
         //     
-        std::vector<Vect3>    vertices;
-        std::vector<Vect3>    color;
+        std::vector<Vect3f>    vertices;
+        std::vector<Vect3f>    color;
         std::vector<Triangle> triangles;
         float l = size/2.0f;
 
