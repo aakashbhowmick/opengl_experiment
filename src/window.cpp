@@ -27,7 +27,8 @@ void RenderLoop( GLFWwindow* window, GLuint VAO, GLuint EBO, Shader& shader);
 const unsigned int SCR_WIDTH  = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-float rot_degrees = 0.0f;
+float rot_x = 0.0f;
+float rot_y = 0.0f;
 float z_trans     = -3.0f;
 
 struct CommandLineOptions
@@ -68,7 +69,8 @@ int main(int argc, char**argv)
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 projection;
-    model = glm::rotate(model, glm::radians(rot_degrees), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(rot_y), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(rot_x), glm::vec3(0.0f, 1.0f, 0.0f));
     view = glm::translate(view, glm::vec3(0.0f, 0.0f, z_trans));
     float fov_degree = 45.0f;
     projection = glm::perspective(glm::radians(fov_degree), 800.0f/600.0f, 0.1f, 100.0f);
@@ -201,7 +203,8 @@ void RenderLoop(
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Update transformation matrix in shader
-        glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(rot_degrees), glm::vec3(1.0f, 0.0f, 0.0f));
+        glm::mat4 model = glm::rotate(glm::mat4(1.0), glm::radians(rot_y), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(rot_x), glm::vec3(0.0f, 1.0f, 0.0f));
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, z_trans));
         shader.setMat4f("model", model);
         shader.setMat4f("view", view);
@@ -227,13 +230,23 @@ void processInput(GLFWwindow* window)
     }
     else if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
-        rot_degrees += 0.5f;
-        std::cout << "rot_degrees : " <<  rot_degrees << std::endl;
+        rot_y+= 0.5f;
+        std::cout << "rot_y: " <<  rot_y << std::endl;
     }
     else if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
-        rot_degrees -= 0.5f;
-        std::cout << "rot_degrees : " <<  rot_degrees << std::endl;
+        rot_y -= 0.5f;
+        std::cout << "rot_y : " <<  rot_y << std::endl;
+    }
+    else if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    {
+        rot_x+= 0.5f;
+        std::cout << "rot_x: " <<  rot_x << std::endl;
+    }
+    else if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    {
+        rot_x -= 0.5f;
+        std::cout << "rot_x : " <<  rot_x << std::endl;
     }
     else if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
