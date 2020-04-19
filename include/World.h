@@ -41,7 +41,7 @@ public:
 
     size_t GetVertexArraySizeBytes() const
     {
-        return all_vertices_.size() * sizeof(VertexRecord);
+        return all_vertices_.size() * sizeof(Vertex);
     }
 
     size_t GetElementArraySizeBytes() const
@@ -61,6 +61,7 @@ public:
 
     void Print() const 
     {
+    #if 0
         std::cout << "Printing world data :" << std::endl;
         std::cout << "Vertices :";
         for(size_t i=0; i < all_vertices_.size(); ++i)
@@ -76,6 +77,7 @@ public:
             std::cout << all_elements_[i].indices[0] << " "
                       << all_elements_[i].indices[1] << " "
                       << all_elements_[i].indices[2] << std::endl;
+    #endif
 
     }
 
@@ -86,8 +88,11 @@ private:
 
     void UpdateArrays_(Mesh* mesh)
     {
-        const std::vector<VertexRecord>& new_vertices = mesh->GetVertices();
+        const std::vector<Vertex>& new_vertices = mesh->GetVertices();
         const std::vector<Triangle>&     new_elements = mesh->GetTriangles();
+
+        // TODO: Compute normals
+
         all_vertices_.insert(all_vertices_.end(), new_vertices.begin(), new_vertices.end());
         all_elements_.insert(all_elements_.end(), new_elements.begin(), new_elements.end());
     }
@@ -95,7 +100,8 @@ private:
 private:
     static std::unique_ptr<World>      the_world_;
     std::vector<std::unique_ptr<Mesh>> objects_;
-    std::vector<VertexRecord>          all_vertices_;
+    std::vector<Vertex>                all_vertices_;
+    std::vector<Vertex>                all_normals_;
     std::vector<Triangle>              all_elements_;
 };
 #endif

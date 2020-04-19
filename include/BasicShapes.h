@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <glm/glm.hpp>
+#include <Vect3.h>
 
 /* Class for generating basic primitive shapes.
  */
@@ -15,19 +16,19 @@ public:
     /* Triangle */
     static Mesh* CreateTriangle()
     {
-        std::vector<Vertex>    vertices;
-        std::vector<Color>     vertex_color;
+        std::vector<Vect3>    vertices;
+        std::vector<Vect3>     vertex_color;
         std::vector<Triangle>  triangles;
 
         vertices.resize(3);
-        vertices[0]  =  { 0.5f,  0.5f, 0.0f };
-        vertices[1]  =  { 0.5f, -0.5f, 0.0f };
-        vertices[2]  =  {-0.5f, -0.5f, 0.0f };
+        vertices[0].Set( 0.5f,  0.5f, 0.0f );
+        vertices[1].Set( 0.5f, -0.5f, 0.0f );
+        vertices[2].Set(-0.5f, -0.5f, 0.0f );
 
         vertex_color.resize(3);
-        vertex_color[0] = {1.0f, 0.0f, 0.0f };
-        vertex_color[1] = {0.0f, 1.0f, 0.0f };
-        vertex_color[2] = {0.0f, 0.0f, 1.0f };
+        vertex_color[0].Set(1.0f, 0.0f, 0.0f );
+        vertex_color[1].Set(0.0f, 1.0f, 0.0f );
+        vertex_color[2].Set(0.0f, 0.0f, 1.0f );
 
         triangles.resize(1);
         triangles[0] = { 0, 1, 2 };
@@ -38,21 +39,21 @@ public:
     /* Square */
     static Mesh* CreateSquare()
     {
-        std::vector<Vertex>   vertices;
-        std::vector<Color>   color;
+        std::vector<Vect3>   vertices;
+        std::vector<Vect3>   color;
         std::vector<Triangle> triangles;
 
         vertices.resize(4);
-        vertices[0]  =  { 0.5f,  0.5f, 0.0f };
-        vertices[1]  =  { 0.5f, -0.5f, 0.0f };
-        vertices[2]  =  {-0.5f, -0.5f, 0.0f };
-        vertices[3]  =  {-0.5f,  0.5f, 0.0f };
+        vertices[0].Set( 0.5f,  0.5f, 0.0f );
+        vertices[1].Set( 0.5f, -0.5f, 0.0f );
+        vertices[2].Set(-0.5f, -0.5f, 0.0f );
+        vertices[3].Set(-0.5f,  0.5f, 0.0f );
 
         color.resize(4);
-        color[0]  =  { 1.0f, 0.0f, 0.0f };
-        color[1]  =  { 0.0f, 1.0f, 0.0f };
-        color[2]  =  { 0.0f, 0.0f, 1.0f };
-        color[3]  =  { 1.0f, 0.0f, 0.0f };
+        color[0].Set( 1.0f, 0.0f, 0.0f );
+        color[1].Set( 0.0f, 1.0f, 0.0f );
+        color[2].Set( 0.0f, 0.0f, 1.0f );
+        color[3].Set( 1.0f, 0.0f, 0.0f );
 
         triangles.resize(2);
         triangles[0] = { 0, 1, 3 };
@@ -77,32 +78,32 @@ public:
         //   +---------+ 
         // 0           1
         //     
-        std::vector<Vertex>   vertices;
-        std::vector<Color>    color;
+        std::vector<Vect3>    vertices;
+        std::vector<Vect3>    color;
         std::vector<Triangle> triangles;
         float l = size/2.0f;
 
         vertices.resize(8);
-        vertices[0]  =  { center.x-l,  center.y-l,  center.z+l };
-        vertices[1]  =  { center.x+l,  center.y-l,  center.z+l };
-        vertices[2]  =  { center.x+l,  center.y+l,  center.z+l };
-        vertices[3]  =  { center.x-l,  center.y+l,  center.z+l };
+        vertices[0].Set( center.x-l,  center.y-l,  center.z+l );
+        vertices[1].Set( center.x+l,  center.y-l,  center.z+l );
+        vertices[2].Set( center.x+l,  center.y+l,  center.z+l );
+        vertices[3].Set( center.x-l,  center.y+l,  center.z+l );
 
-        vertices[4]  =  { center.x-l,  center.y-l,  center.z-l };
-        vertices[5]  =  { center.x+l,  center.y-l,  center.z-l };
-        vertices[6]  =  { center.x+l,  center.y+l,  center.z-l };
-        vertices[7]  =  { center.x-l,  center.y+l,  center.z-l };
+        vertices[4].Set( center.x-l,  center.y-l,  center.z-l );
+        vertices[5].Set( center.x+l,  center.y-l,  center.z-l );
+        vertices[6].Set( center.x+l,  center.y+l,  center.z-l );
+        vertices[7].Set( center.x-l,  center.y+l,  center.z-l );
 
         color.resize(8);
-        color[0]  =  { 1.0f, 0.0f, 0.0f };
-        color[1]  =  { 0.0f, 1.0f, 0.0f };
-        color[2]  =  { 0.0f, 0.0f, 1.0f };
-        color[3]  =  { 1.0f, 1.0f, 1.0f };
+        color[0].Set( 1.0f, 0.0f, 0.0f );
+        color[1].Set( 0.0f, 1.0f, 0.0f );
+        color[2].Set( 0.0f, 0.0f, 1.0f );
+        color[3].Set( 1.0f, 1.0f, 1.0f );
 
-        color[4]  =  { 0.5f, 0.3f, 0.1f };
-        color[5]  =  { 0.3f, 2.0f, 0.8f };
-        color[6]  =  { 0.0f, 0.4f, 1.0f };
-        color[7]  =  { 0.5f, 0.3f, 0.8f };
+        color[4].Set( 0.5f, 0.3f, 0.1f );
+        color[5].Set( 0.3f, 2.0f, 0.8f );
+        color[6].Set( 0.0f, 0.4f, 1.0f );
+        color[7].Set( 0.5f, 0.3f, 0.8f );
 
 
         triangles.resize(12);
