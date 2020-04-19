@@ -6,6 +6,7 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
+#include <glm/glm.hpp>
 
 // Vect3 
 template <typename T>
@@ -47,6 +48,11 @@ struct Vect3
     {
         xyz[0]=array3f[0]; xyz[1]=array3f[1]; xyz[2]=array3f[2];
         return *this;
+    }
+
+    glm::vec3 GetGLM() const
+    {
+        return glm::vec3(xyz[0], xyz[1], xyz[2]);
     }
 
     void Set(T x, T y, T z)

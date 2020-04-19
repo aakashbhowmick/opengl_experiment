@@ -83,7 +83,7 @@ int main(int argc, char**argv)
     shader.setMat4f("view", view);
     shader.setMat4f("projection", projection);
 
-    glm::vec3 lightPos(1.0f, 1.0f, 1.0f);
+    glm::vec3 lightPos(0.0f, 1.0f, 1.0f);
     glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
     shader.setVec3("lightPos", lightPos);
     shader.setVec3("lightColor", lightColor);
