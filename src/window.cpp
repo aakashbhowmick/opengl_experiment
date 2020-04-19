@@ -60,7 +60,7 @@ int main()
     shader.setMat4f("projection", projection);
 
     // Load mesh data
-    World* the_world = World::GetWorld();
+    World* the_world = World::GetPtr();
     the_world->AddObject(BasicShapes::CreateTriangle());
     the_world->Print();
     const float* vertex_array = the_world->GetVertexArrayPtr();
@@ -179,7 +179,7 @@ void RenderLoop(
         // Draw elements
         glBindVertexArray(VAO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        GLsizei elem_array_size = 6;
+        GLsizei elem_array_size = World::GetPtr()->ElementCount() * 3;
         void* offset = 0;
         glDrawElements(GL_TRIANGLES, elem_array_size, GL_UNSIGNED_INT, offset);
 

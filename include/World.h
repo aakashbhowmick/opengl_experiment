@@ -9,7 +9,7 @@
 class World
 {
 public:
-    static World* GetWorld()
+    static World* GetPtr()
     {
         if(!the_world_)
             the_world_.reset(new World());
@@ -47,6 +47,16 @@ public:
     size_t GetElementArraySizeBytes() const
     {
         return all_elements_.size() * sizeof(Triangle);
+    }
+
+    size_t VertexCount() const
+    {
+        return all_vertices_.size();
+    }
+
+    size_t ElementCount() const
+    {
+        return all_elements_.size();
     }
 
     void Print() const 
