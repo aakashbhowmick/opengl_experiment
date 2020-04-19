@@ -48,29 +48,30 @@ public:
     static Mesh* CreateCube(float size)
     {
         //     
-        //    3   +--------+ 2
+        //    7   +--------+ 6
         //       *        *| 
         //     *        *  |
-        // 0 +---------+ 1 |
+        // 3 +---------+ 2 |
         //   |         |   |
-        //   |         |   + 6
+        //   |         |   + 5
         //   |         | *
         //   +---------+ 
-        // 4           5
+        // 0           1
         //     
         std::vector<VertexRecord> vertices;
         std::vector<Triangle>     triangles;
-        vertices.resize(6);
+        vertices.resize(8);
+        float l = size/2.0f;
 
-        vertices[0]  =  { -size,  -size,  size, 1.0f, 0.0f, 0.0f };
-        vertices[1]  =  {  size,  -size,  size, 1.0f, 0.0f, 0.0f };
-        vertices[2]  =  {  size,   size,  size, 0.0f, 1.0f, 0.0f };
-        vertices[3]  =  { -size,   size,  size, 0.0f, 0.0f, 1.0f };
+        vertices[0]  =  { -l,  -l,  l, 1.0f, 0.0f, 0.0f };
+        vertices[1]  =  {  l,  -l,  l, 0.0f, 1.0f, 0.0f };
+        vertices[2]  =  {  l,   l,  l, 0.0f, 0.0f, 1.0f };
+        vertices[3]  =  { -l,   l,  l, 1.0f, 1.0f, 1.0f };
 
-        vertices[4]  =  { -size,  -size,  -size, 1.0f, 0.0f, 0.0f };
-        vertices[5]  =  {  size,  -size,  -size, 1.0f, 0.0f, 0.0f };
-        vertices[6]  =  {  size,   size,  -size, 0.0f, 1.0f, 0.0f };
-        vertices[7]  =  { -size,   size,  -size, 0.0f, 0.0f, 1.0f };
+        vertices[4]  =  { -l,  -l,  -l, 0.5f, 0.3f, 0.1f };
+        vertices[5]  =  {  l,  -l,  -l, 0.3f, 2.0f, 0.8f };
+        vertices[6]  =  {  l,   l,  -l, 0.0f, 0.4f, 1.0f };
+        vertices[7]  =  { -l,   l,  -l, 0.5f, 0.3f, 0.8f };
 
 
         triangles.resize(12);
