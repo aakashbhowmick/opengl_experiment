@@ -68,24 +68,20 @@ public:
 
     void Print() const 
     {
-    #if 0
         std::cout << "Printing world data :" << std::endl;
         std::cout << "Vertices :";
         for(size_t i=0; i < all_vertices_.size(); ++i)
-            std::cout << all_vertices_[i].xyzrgb[0] << " "
-                      << all_vertices_[i].xyzrgb[1] << " "
-                      << all_vertices_[i].xyzrgb[2] << " "
-                      << all_vertices_[i].xyzrgb[3] << " "
-                      << all_vertices_[i].xyzrgb[4] << " "
-                      << all_vertices_[i].xyzrgb[5] << std::endl;
+        {
+            std::cout << "{" << all_vertices_[i].xyz[0]   << " " << all_vertices_[i].xyz[1]   << " " << all_vertices_[i].xyz[2]   << "} | ";
+            std::cout << "{" << all_vertices_[i].rgb[0]   << " " << all_vertices_[i].rgb[1]   << " " << all_vertices_[i].rgb[2]   << "} | ";
+            std::cout << "{" << all_vertices_[i].norm3[0] << " " << all_vertices_[i].norm3[1] << " " << all_vertices_[i].norm3[2] << "}" << std::endl;
+        }
 
         std::cout << "Triangles:";
         for(size_t i=0; i < all_elements_.size(); ++i)
-            std::cout << all_elements_[i].indices[0] << " "
-                      << all_elements_[i].indices[1] << " "
-                      << all_elements_[i].indices[2] << std::endl;
-    #endif
-
+            std::cout << all_elements_[i][0] << " "
+                      << all_elements_[i][1] << " "
+                      << all_elements_[i][2] << std::endl;
     }
 
 
@@ -124,7 +120,7 @@ private:
         const size_t M = all_elements_.size();
         all_elements_.resize(all_elements_.size() + trias.size());
         for(size_t i=0; i < trias.size(); ++i)
-            all_elements_[M+i] = trias[i] + Triangle(N, N, N); // Offset all vertices by N
+            all_elements_[M+i] = trias[i] + Triangle(N); // Offset all vertices by N
     }
 
 private:

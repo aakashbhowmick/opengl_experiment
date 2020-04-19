@@ -23,6 +23,11 @@ struct Vect3
         xyz[0] = x; xyz[1] = y; xyz[2] = z;
     }
 
+    Vect3(const T& a)
+    {
+        xyz[0] = xyz[1] = xyz[2] = a;
+    }
+
     Vect3(const Vect3& v)
     {
         xyz[0]=v.xyz[0]; xyz[1]=v.xyz[1]; xyz[2]=v.xyz[2]; 
@@ -91,7 +96,7 @@ struct Vect3
     
     Vect3& operator+=(const Vect3& other)
     {
-        xyz[0] = other.xyz[0];  xyz[1] += other.xyz[1]; xyz[2] += other.xyz[2];
+        xyz[0] += other.xyz[0];  xyz[1] += other.xyz[1]; xyz[2] += other.xyz[2];
         return *this;
     }
     
