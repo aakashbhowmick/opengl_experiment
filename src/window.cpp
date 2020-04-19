@@ -73,13 +73,20 @@ int main(int argc, char**argv)
     projection = glm::perspective(glm::radians(fov_degree), 800.0f/600.0f, 0.1f, 100.0f);
 
     // Load, compile and link shaders
-    const char* vshader_path = "/home/aakash/Code/opengl_experiment/shaders/vertex_shader1.vs";
-    const char* fshader_path = "/home/aakash/Code/opengl_experiment/shaders/fragment_shader1.fs";
+    //const char* vshader_path = "/home/aakash/Code/opengl_experiment/shaders/vertex_shader1.vs";
+    //const char* fshader_path = "/home/aakash/Code/opengl_experiment/shaders/fragment_shader1.fs";
+    const char* vshader_path = "/home/aakash/Code/opengl_experiment/shaders/with_light.vs";
+    const char* fshader_path = "/home/aakash/Code/opengl_experiment/shaders/with_light.fs";
     Shader shader(vshader_path, fshader_path);
     shader.use();
     shader.setMat4f("model", model);
     shader.setMat4f("view", view);
     shader.setMat4f("projection", projection);
+
+    glm::vec3 lightPos(1.0f, 1.0f, 1.0f);
+    glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+    shader.setVec3("lightPos", lightPos);
+    shader.setVec3("lightColor", lightColor);
 
     // Load mesh data
     World* the_world = World::GetPtr();

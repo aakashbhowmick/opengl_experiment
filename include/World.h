@@ -5,6 +5,7 @@
 #include <memory>
 
 #include <Mesh.h>
+#include <Light.h>
 
 struct VertexRecord
 {
@@ -28,6 +29,11 @@ public:
     {
         objects_.emplace_back(mesh);
         UpdateArrays_(mesh);
+    }
+
+    void AddLight(const Light& light)
+    {
+        lights_.push_back(light);
     }
 
     const float* GetVertexArrayPtr() const
@@ -128,5 +134,6 @@ private:
     std::vector<std::unique_ptr<Mesh>> objects_;
     std::vector<VertexRecord>          all_vertices_;
     std::vector<Triangle>              all_elements_;
+    std::vector<Light>                 lights_;
 };
 #endif
