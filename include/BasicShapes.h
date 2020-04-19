@@ -33,7 +33,7 @@ public:
         triangles.resize(1);
         triangles[0].Set( 0, 1, 2 );
 
-        return new Mesh(vertices, vertex_color, triangles);
+        return new Mesh(Vect3f(0.0f), vertices, vertex_color, triangles);
     }
 
     /* Square */
@@ -59,7 +59,7 @@ public:
         triangles[0].Set( 0, 1, 3 );
         triangles[1].Set( 1, 2, 3 );
 
-        return new Mesh(vertices, color, triangles);
+        return new Mesh(Vect3f(0.0f), vertices, color, triangles);
     }
 
     /* Cube */
@@ -120,7 +120,7 @@ public:
         triangles[10].Set( 4, 6, 5 );
         triangles[11].Set( 6, 4, 7 );
 
-        return new Mesh(vertices, color, triangles);
+        return new Mesh(Vect3f(0.0f), vertices, color, triangles);
     }
 };
 
