@@ -6,6 +6,13 @@
 
 #include <Mesh.h>
 
+struct VertexRecord
+{
+    float xyz[3];
+    float rgb[3];
+    float norm3[3];
+} __attribute__((packed));
+
 class World
 {
 public:
@@ -41,7 +48,7 @@ public:
 
     size_t GetVertexArraySizeBytes() const
     {
-        return all_vertices_.size() * sizeof(Vertex);
+        return all_vertices_.size() * sizeof(VertexRecord);
     }
 
     size_t GetElementArraySizeBytes() const
@@ -88,28 +95,42 @@ private:
 
     void UpdateArrays_(Mesh* mesh)
     {
-        const std::vector<Vertex>&   verts = mesh->GetVertices();
+        const std::vector<Vect3f>&   verts = mesh->GetVertices();
+        const std::vector<Vect3f>&   colors= mesh->GetColors();
         const std::vector<Triangle>& trias = mesh->GetTriangles();
 
-        std::vector<Vect3f> vert_normals(verts.size());
+        // Compute vertex normals
+        std::vector<Vect3f> normals(verts.size());
         for(size_t i=0; i < trias.size(); ++i)
         {
-            Vect3f normal = (verts[trias[i][2]].pos - verts[trias[i][1]].pos) * (verts[trias[i][1]].pos - verts[trias[i][0]].pos).normalize();
+            Vect3f normal = (verts[trias[i][2]] - verts[trias[i][1]]) * (verts[trias[i][1]] - verts[trias[i][0]]).normalize();
             for(size_t j=0; j < 3; ++j)
-                vert_normals[ trias[i][j] ] += normal;
+                normals[ trias[i][j] ] += normal;
         }
-        for(size_t i=0; i < vert_normals.size(); ++i)
-            vert_normals[i].normalize();
+        for(size_t i=0; i < normals.size(); ++i)
+            normals[i].normalize();
 
-        all_vertices_.insert(all_vertices_.end(), verts.begin(), verts.end());
-        all_elements_.insert(all_elements_.end(), trias.begin(), trias.end());
+        // Update vertices
+        const size_t N = all_vertices_.size();
+        all_vertices_.resize(all_vertices_.size() + verts.size());
+        for(size_t i=0; i < verts.size(); ++i)
+        {
+            all_vertices_[N+i].xyz[0]   = verts[i][0];   all_vertices_[N+i].xyz[1]   = verts[i][1];   all_vertices_[N+i].xyz[2]   = verts[i][2]; 
+            all_vertices_[N+i].rgb[0]   = colors[i][0];  all_vertices_[N+i].rgb[1]   = colors[i][1];  all_vertices_[N+i].rgb[2]   = colors[i][2]; 
+            all_vertices_[N+i].norm3[0] = normals[i][0]; all_vertices_[N+i].norm3[1] = normals[i][1]; all_vertices_[N+i].norm3[2] = normals[i][2]; 
+        }
+
+        // Update triangles
+        const size_t M = all_elements_.size();
+        all_elements_.resize(all_elements_.size() + trias.size());
+        for(size_t i=0; i < trias.size(); ++i)
+            all_elements_[M+i] = trias[i] + Triangle(N, N, N); // Offset all vertices by N
     }
 
 private:
     static std::unique_ptr<World>      the_world_;
     std::vector<std::unique_ptr<Mesh>> objects_;
-    std::vector<Vertex>                all_vertices_;
-    std::vector<Vertex>                all_normals_;
+    std::vector<VertexRecord>          all_vertices_;
     std::vector<Triangle>              all_elements_;
 };
 #endif

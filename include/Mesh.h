@@ -6,21 +6,8 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
-
 #include <Vect3.h>
 
-// Vertex
-struct Vertex
-{
-    Vect3f pos;
-    Vect3f color;
-
-    Vertex(const Vect3f& p, const Vect3f& c):
-      pos{p}, color{c}
-    {
-    }
-
-} __attribute__((packed));
 
 
 /**
@@ -30,23 +17,22 @@ class Mesh
 {
 public:
     Mesh(const std::vector<Vect3f>&    vertex_list,
-         const std::vector<Vect3f>&     vertex_color,
+         const std::vector<Vect3f>&    vertex_color,
          const std::vector<Triangle>&  triangle_list):
+         vertices_{vertex_list},
+         colors_{vertex_color},
          triangles_{triangle_list}
     {
-        assert(vertex_list.size() == vertex_color.size());
-
-        // Merge vertex and color list
-        vertices_.reserve(vertex_list.size());
-        for(size_t i=0; i < vertex_list.size(); ++i)
-        {
-            vertices_.emplace_back(vertex_list[i], vertex_color[i]);
-        }
     }
 
-    const std::vector<Vertex>& GetVertices() const
+    const std::vector<Vect3f>& GetVertices() const
     {
         return vertices_;
+    }
+
+    const std::vector<Vect3f>& GetColors() const
+    {
+        return colors_;
     }
 
     const std::vector<Triangle>& GetTriangles() const
@@ -56,8 +42,9 @@ public:
 
 
 private:
-    std::vector<Vertex> vertices_;
-    std::vector<Triangle>     triangles_;
+    std::vector<Vect3f>    vertices_;
+    std::vector<Vect3f>    colors_;
+    std::vector<Triangle>  triangles_;
 };
 
 #endif

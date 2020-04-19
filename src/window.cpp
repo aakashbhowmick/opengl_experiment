@@ -85,10 +85,10 @@ int main(int argc, char**argv)
     World* the_world = World::GetPtr();
     the_world->AddObject(BasicShapes::CreateCube(0.5, glm::vec3(0.0f)));
     the_world->Print();
-    const float* vertex_array = the_world->GetVertexArrayPtr();
-    size_t vertex_array_size = the_world->GetVertexArraySizeBytes();
+    const float* vertex_array      = the_world->GetVertexArrayPtr();
+    size_t vertex_array_size       = the_world->GetVertexArraySizeBytes();
     const unsigned int* tria_array = the_world->GetElementArrayPtr();
-    size_t tria_array_size = the_world->GetElementArraySizeBytes();
+    size_t tria_array_size         = the_world->GetElementArraySizeBytes();
 
     /* Create a vertex-array object
      * A VAO stores meta-data about the VBO.
@@ -111,16 +111,18 @@ int main(int argc, char**argv)
     
     GLuint vert_attribute_coord = 0;   
     GLuint vert_attribute_color = 1;  
-    GLuint coord_comp = 3;              // 3 co-ordinates per vertex
-    GLuint color_comp = 3;              // 3 co-ordinates per color
-    GLsizei stride = 6*sizeof(float);   // Stride size
-    void* coord_offset = NULL;          // Offset from start
-    void* color_offset = (void*)(3*sizeof(float));
+    GLuint vert_attribute_norm  = 2;  
+    GLuint coord_comp = 3;                   // 3 co-ordinates per vertex
+    GLuint color_comp = 3;                   // 3 co-ordinates per color
+    GLuint norm_comp  = 3;                   // 3 co-ordinates per normal
+    GLsizei stride = sizeof(VertexRecord);   // Stride size
 
     glVertexAttribPointer(vert_attribute_coord, coord_comp, GL_FLOAT, GL_FALSE, stride, (void*)0);
-    glVertexAttribPointer(vert_attribute_color, color_comp, GL_FLOAT, GL_FALSE, stride, (void*)(3*sizeof(float)) );
+    glVertexAttribPointer(vert_attribute_color, color_comp, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(VertexRecord::xyz)) );
+    glVertexAttribPointer(vert_attribute_norm , norm_comp,  GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(VertexRecord::xyz) + sizeof(VertexRecord::rgb)) );
     glEnableVertexAttribArray(vert_attribute_coord);
     glEnableVertexAttribArray(vert_attribute_color);
+    glEnableVertexAttribArray(vert_attribute_norm);
 
     /* Create an element buffer object (EBO)
      */

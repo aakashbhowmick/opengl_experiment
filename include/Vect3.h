@@ -18,6 +18,11 @@ struct Vect3
         xyz[0] = 0.0; xyz[1] = 0.0; xyz[2] = 0.0;
     }
 
+    Vect3(const T& x, const T& y, const T& z)
+    {
+        xyz[0] = x; xyz[1] = y; xyz[2] = z;
+    }
+
     Vect3(const Vect3& v)
     {
         xyz[0]=v.xyz[0]; xyz[1]=v.xyz[1]; xyz[2]=v.xyz[2]; 
@@ -138,7 +143,7 @@ struct Vect3
         return *this;
     }
 
-} __attribute__((packed));
+};
 
 using Vect3f = Vect3<float>;
 using Vect3i = Vect3<unsigned int>;
