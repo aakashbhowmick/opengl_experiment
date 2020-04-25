@@ -66,18 +66,13 @@ int main(int argc, char**argv)
     }
     glEnable(GL_DEPTH_TEST);  // Enable depth testing
 
-    glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 view = glm::mat4(1.0f);
-    glm::mat4 projection;
-    model = glm::rotate(model, glm::radians(rot_y), glm::vec3(1.0f, 0.0f, 0.0f));
+    glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(rot_y), glm::vec3(1.0f, 0.0f, 0.0f));
     model = glm::rotate(model, glm::radians(rot_x), glm::vec3(0.0f, 1.0f, 0.0f));
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, z_trans));
+    glm::mat4 view = glm::translate(glm::mat4(1.0), glm::vec3(0.0f, 0.0f, z_trans));
     float fov_degree = 45.0f;
-    projection = glm::perspective(glm::radians(fov_degree), 800.0f/600.0f, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(fov_degree), 800.0f/600.0f, 0.1f, 100.0f);
 
     // Load, compile and link shaders
-    //const char* vshader_path = "/home/aakash/Code/opengl_experiment/shaders/vertex_shader1.vs";
-    //const char* fshader_path = "/home/aakash/Code/opengl_experiment/shaders/fragment_shader1.fs";
     const char* vshader_path = "/home/aakash/Code/opengl_experiment/shaders/with_light.vs";
     const char* fshader_path = "/home/aakash/Code/opengl_experiment/shaders/with_light.fs";
     Shader shader(vshader_path, fshader_path);
