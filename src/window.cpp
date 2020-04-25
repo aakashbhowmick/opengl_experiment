@@ -93,7 +93,7 @@ int main(int argc, char**argv)
 
     // Load mesh data
     World* the_world = World::GetPtr();
-    the_world->AddObject(BasicShapes::CreateCube(0.5, glm::vec3(0.0f)));
+    the_world->AddObject(BasicShapes::CreateCube2(0.5, glm::vec3(0.0f)));
     the_world->Print();
     const float* vertex_array      = the_world->GetVertexArrayPtr();
     size_t vertex_array_size       = the_world->GetVertexArraySizeBytes();

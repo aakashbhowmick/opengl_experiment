@@ -122,6 +122,48 @@ public:
 
         return new Mesh(Vect3f(0.0f), vertices, color, triangles);
     }
+
+    /* Create cube with disconnected triangles */
+    static Mesh* CreateCube2(
+        float size,
+        glm::vec3 center)
+    {
+        //     
+        //    7   +--------+ 6
+        //       *        *| 
+        //     *        *  |
+        // 3 +---------+ 2 |
+        //   |         |   |
+        //   |         |   + 5
+        //   |         | *
+        //   +---------+ 
+        // 0           1
+        //     
+
+        Mesh* cube_mesh = CreateCube(size, center);
+        const std::vector<Vect3f>&   v0 = cube_mesh->GetVertices();
+        const std::vector<Triangle>& t0 = cube_mesh->GetTriangles();
+        const std::vector<Vect3f>&   c0 = cube_mesh->GetColors();
+
+        std::vector<Vect3f>    vertices;
+        std::vector<Triangle>  triangles;
+        std::vector<Vect3f>    color;
+
+        triangles.resize(t0.size());
+        for(size_t itria=0; itria < t0.size(); ++itria)
+        {
+            for(size_t jpt=0; jpt < 3; ++jpt)
+            {
+                vertices.push_back(v0[t0[itria][jpt]]);
+                color.push_back(c0[t0[itria][jpt]]);
+                triangles[itria][jpt] = vertices.size()-1;
+            }
+        }
+
+
+        delete cube_mesh;
+        return new Mesh(Vect3f(0.0f), vertices, color, triangles);
+    }
 };
 
 #endif
