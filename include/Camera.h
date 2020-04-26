@@ -41,8 +41,6 @@ public:
     Vect3f GetViewingDirection() const
     {
         // Viewing direction (from camera to object) is opposite to
-        // camera z-direction
-        return cam_z_ * -1.0f;
     }
 
     Vect3f GetUpDirection() const

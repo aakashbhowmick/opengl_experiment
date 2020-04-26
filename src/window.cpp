@@ -80,6 +80,7 @@ int main(int argc, char**argv)
     shader.setMat4f("model", glm::mat4(1.0f));
     shader.setMat4f("view", glm::mat4(1.0f));
     shader.setMat4f("projection", projection);
+    shader.setVec3("viewing_pos", the_camera.GetPosition().glm());
 
     glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
     shader.setVec3("lightColor", lightColor);
@@ -202,6 +203,7 @@ void RenderLoop(
         glm::mat4 view  = the_camera.GetViewMatrix();
         shader.setMat4f("model", model);
         shader.setMat4f("view", view);
+        shader.setVec3("viewing_pos", the_camera.GetPosition().glm());
 
 
         //glm::vec3 lightPos( light_radius*glm::cos(glm::radians(light_angle)), light_radius*glm::sin(glm::radians(light_angle)), 0.0);
