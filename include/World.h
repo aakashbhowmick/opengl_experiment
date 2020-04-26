@@ -101,10 +101,21 @@ public:
                       << all_elements_[i][2] << std::endl;
     }
 
+    void Rotate(float angle_degrees, const Vect3f& axis)
+    {
+        model_mat_ = glm::rotate(model_mat_, glm::radians(angle_degrees), axis.glm());
+    }
+
+    const glm::mat4& GetModelMatrix() const
+    {
+        return model_mat_;
+    }
+
 
 
 private:
-    World()
+    World():
+      model_mat_{1.0f}
     {
         // Create default camera at origin
         the_camera_ = std::make_unique<Camera>();
@@ -151,5 +162,7 @@ private:
     std::vector<Triangle>              all_elements_;
     std::vector<Light>                 lights_;
     std::unique_ptr<Camera>            the_camera_;
+
+    glm::mat4                          model_mat_;
 };
 #endif

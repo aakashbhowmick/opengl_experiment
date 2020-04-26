@@ -29,10 +29,6 @@ const unsigned int SCR_HEIGHT = 600;
 float light_radius = 10.0;
 float light_angle  = 0.0;
 
-float rot_x = 0.0f;
-float rot_y = 0.0f;
-float z_trans     = -3.0f;
-
 struct CommandLineOptions
 {
     bool wireframeMode = false;
@@ -72,19 +68,17 @@ int main(int argc, char**argv)
     Camera& the_camera = the_world->GetCamera();
     the_camera.Translate(Vect3f(0.0f, 0.0f, -3.0f));
 
-    glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(rot_y), glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(rot_x), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 view = the_camera.GetViewMatrix();
-    float fov_degree = 45.0f;
-    glm::mat4 projection = glm::perspective(glm::radians(fov_degree), 800.0f/600.0f, 0.1f, 100.0f);
 
     // Load, compile and link shaders
     const char* vshader_path = "/home/aakash/Code/opengl_experiment/shaders/with_light.vs";
     const char* fshader_path = "/home/aakash/Code/opengl_experiment/shaders/with_light.fs";
     Shader shader(vshader_path, fshader_path);
     shader.use();
-    shader.setMat4f("model", model);
-    shader.setMat4f("view", view);
+
+    float fov_degree = 45.0f;
+    glm::mat4 projection = glm::perspective(glm::radians(fov_degree), 800.0f/600.0f, 0.1f, 100.0f);
+    shader.setMat4f("model", glm::mat4(1.0f));
+    shader.setMat4f("view", glm::mat4(1.0f));
     shader.setMat4f("projection", projection);
 
     glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
@@ -204,9 +198,8 @@ void RenderLoop(
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Update transformation matrix in shader
-        glm::mat4 model = glm::rotate(glm::mat4(1.0), glm::radians(rot_y), glm::vec3(1.0f, 0.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(rot_x), glm::vec3(0.0f, 1.0f, 0.0f));
-        glm::mat4 view = the_camera.GetViewMatrix();
+        glm::mat4 model = the_world->GetModelMatrix();
+        glm::mat4 view  = the_camera.GetViewMatrix();
         shader.setMat4f("model", model);
         shader.setMat4f("view", view);
 
@@ -239,23 +232,19 @@ void processInput(
     }
     else if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
-        rot_y+= 0.5f;
-        std::cout << "rot_y: " <<  rot_y << std::endl;
+        the_world->Rotate(0.5, Vect3f(1.0, 0.0, 0.0));
     }
     else if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
-        rot_y -= 0.5f;
-        std::cout << "rot_y : " <<  rot_y << std::endl;
+        the_world->Rotate(-0.5, Vect3f(1.0, 1.0, 0.0));
     }
     else if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
-        rot_x+= 0.5f;
-        std::cout << "rot_x: " <<  rot_x << std::endl;
+        the_world->Rotate(0.5, Vect3f(0.0, 1.0, 0.0));
     }
     else if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
-        rot_x -= 0.5f;
-        std::cout << "rot_x : " <<  rot_x << std::endl;
+        the_world->Rotate(-0.5, Vect3f(0.0, 1.0, 0.0));
     }
     else if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
