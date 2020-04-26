@@ -78,10 +78,10 @@ private:
     void UpdateViewMatrix_()
     {
         Vect3f cam_x_  = (cam_y_.cross(cam_z_)).normalize();
-        view_mat_[0] = glm::vec4(cam_x_.GetGLM(), 0.0f);  // col 0
-        view_mat_[1] = glm::vec4(cam_y_.GetGLM(), 0.0f);  // col 1
-        view_mat_[2] = glm::vec4(cam_z_.GetGLM(), 0.0f);  // col 2
-        view_mat_[3] = glm::vec4(pos_.GetGLM(),   1.0f);  // col 3
+        view_mat_[0] = glm::vec4(cam_x_.glm(), 0.0f);  // col 0
+        view_mat_[1] = glm::vec4(cam_y_.glm(), 0.0f);  // col 1
+        view_mat_[2] = glm::vec4(cam_z_.glm(), 0.0f);  // col 2
+        view_mat_[3] = glm::vec4(pos_.glm()  , 1.0f);  // col 3
 
         PrintMatrix_(view_mat_, "View Matrix");
         PrintMatrix_(ref_mat_, "Ref Matrix");

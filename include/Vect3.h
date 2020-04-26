@@ -29,6 +29,12 @@ struct Vect3
         xyz[0] = xyz[1] = xyz[2] = a;
     }
 
+    // User-defined conversion t0 glm::vec3
+    operator glm::vec3() const
+    {
+        return glm();
+    }
+
     Vect3(const Vect3& v)
     {
         xyz[0]=v.xyz[0]; xyz[1]=v.xyz[1]; xyz[2]=v.xyz[2]; 
@@ -50,7 +56,7 @@ struct Vect3
         return *this;
     }
 
-    glm::vec3 GetGLM() const
+    glm::vec3 glm() const
     {
         return glm::vec3(xyz[0], xyz[1], xyz[2]);
     }
