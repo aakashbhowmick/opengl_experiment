@@ -26,6 +26,8 @@ void RenderLoop( GLFWwindow* window, GLuint VAO, GLuint EBO, Shader& shader);
 
 const unsigned int SCR_WIDTH  = 800;
 const unsigned int SCR_HEIGHT = 600;
+float light_radius = 10.0;
+float light_angle  = 0.0;
 
 float rot_x = 0.0f;
 float rot_y = 0.0f;
@@ -81,9 +83,7 @@ int main(int argc, char**argv)
     shader.setMat4f("view", view);
     shader.setMat4f("projection", projection);
 
-    glm::vec3 lightPos(0.0f, 5.0f, 5.0f);
     glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
-    shader.setVec3("lightPos", lightPos);
     shader.setVec3("lightColor", lightColor);
 
     // Load mesh data
@@ -203,6 +203,12 @@ void RenderLoop(
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, z_trans));
         shader.setMat4f("model", model);
         shader.setMat4f("view", view);
+
+
+        //glm::vec3 lightPos( light_radius*glm::cos(glm::radians(light_angle)), light_radius*glm::sin(glm::radians(light_angle)), 0.0);
+        glm::vec3 lightPos( 0.0, light_radius*glm::cos(glm::radians(light_angle)), light_radius*glm::sin(glm::radians(light_angle)) );
+        shader.setVec3("lightPos", lightPos);
+        light_angle += 1;
 
         // Draw elements
         glBindVertexArray(VAO);
