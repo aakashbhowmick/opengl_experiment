@@ -6,6 +6,7 @@
 
 #include <Mesh.h>
 #include <Light.h>
+#include <Camera.h>
 
 struct VertexRecord
 {
@@ -34,6 +35,16 @@ public:
     void AddLight(const Light& light)
     {
         lights_.push_back(light);
+    }
+
+    Camera& GetCamera()
+    {
+        return *the_camera_;
+    }
+
+    const Camera& GetCamera() const
+    {
+        return *the_camera_;
     }
 
     const float* GetVertexArrayPtr() const
@@ -93,7 +104,11 @@ public:
 
 
 private:
-    World() = default;
+    World()
+    {
+        // Create default camera at origin
+        the_camera_ = std::make_unique<Camera>();
+    }
 
     void UpdateArrays_(Mesh* mesh)
     {
@@ -135,5 +150,6 @@ private:
     std::vector<VertexRecord>          all_vertices_;
     std::vector<Triangle>              all_elements_;
     std::vector<Light>                 lights_;
+    std::unique_ptr<Camera>            the_camera_;
 };
 #endif
