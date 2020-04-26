@@ -78,11 +78,10 @@ private:
     void UpdateViewMatrix_()
     {
         Vect3f cam_x_  = (cam_y_.cross(cam_z_)).normalize();
-        view_mat_ = glm::mat4(
-                        cam_x_[0]   , cam_x_[1]  , cam_x_[2]  , 0.0f,
-                        cam_y_[0]   , cam_y_[1]  , cam_y_[2]  , 0.0f,
-                        cam_z_[0]   , cam_z_[1]  , cam_z_[2]  , 0.0f,
-                        pos_[0]     , pos_[1]    , pos_[2]    , 1.0f );
+        view_mat_[0] = glm::vec4(cam_x_.GetGLM(), 0.0f);  // col 0
+        view_mat_[1] = glm::vec4(cam_y_.GetGLM(), 0.0f);  // col 1
+        view_mat_[2] = glm::vec4(cam_z_.GetGLM(), 0.0f);  // col 2
+        view_mat_[3] = glm::vec4(pos_.GetGLM(),   1.0f);  // col 3
 
         PrintMatrix_(view_mat_, "View Matrix");
         PrintMatrix_(ref_mat_, "Ref Matrix");
@@ -91,10 +90,10 @@ private:
     static void PrintMatrix_(const glm::mat4& mat, const std::string& msg)
     {
         std::cout << msg << std::endl;
-        std::cout << mat[0][0] << "," << mat[0][1] << "," << mat[0][2] << "," << mat[0][3] << std::endl;
-        std::cout << mat[1][0] << "," << mat[1][1] << "," << mat[1][2] << "," << mat[1][3] << std::endl;
-        std::cout << mat[2][0] << "," << mat[2][1] << "," << mat[2][2] << "," << mat[2][3] << std::endl;
-        std::cout << mat[3][0] << "," << mat[3][1] << "," << mat[3][2] << "," << mat[3][3] << std::endl;
+        std::cout << mat[0][0] << "," << mat[1][0] << "," << mat[2][0] << "," << mat[3][0] << std::endl;
+        std::cout << mat[0][1] << "," << mat[1][1] << "," << mat[2][1] << "," << mat[3][1] << std::endl;
+        std::cout << mat[0][2] << "," << mat[1][2] << "," << mat[2][2] << "," << mat[3][2] << std::endl;
+        std::cout << mat[0][3] << "," << mat[1][3] << "," << mat[2][3] << "," << mat[3][3] << std::endl;
     }
 
 
