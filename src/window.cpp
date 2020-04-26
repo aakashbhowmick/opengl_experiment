@@ -265,6 +265,18 @@ void processInput(
     {
         the_world->GetCamera().Translate(Vect3f(0.0f, 0.0f, -0.1f));
     }
+    else if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        the_world->GetCamera().Translate(Vect3f(-0.1f, 0.0f, 0.0f));
+    }
+    else if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+    {
+        the_world->GetCamera().Translate(Vect3f(0.1f, 0.0f, 0.0f));
+    }
+    else if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+    {
+        the_world->GetCamera().Reset();
+    }
 }
 
 // Callback : When window is resized
