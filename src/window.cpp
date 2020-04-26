@@ -236,7 +236,7 @@ void processInput(
     }
     else if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
-        the_world->Rotate(-0.5, Vect3f(1.0, 1.0, 0.0));
+        the_world->Rotate(-0.5, Vect3f(1.0, 0.0, 0.0));
     }
     else if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
