@@ -15,8 +15,7 @@ public:
     Camera():
         pos_{0.0f, 0.0f, 0.0f},
         cam_y_{0.0f, 1.0f, 0.0f},
-        cam_z_{0.0f, 0.0f, 1.0f},
-        ref_mat_{1.0f}
+        cam_z_{0.0f, 0.0f, 1.0f}
     {
         UpdateViewMatrix_();
     }
@@ -56,15 +55,9 @@ public:
         return view_mat_;
     }
 
-    const glm::mat4& GetRefMatrix() const
-    {
-        return ref_mat_;
-    }
-
     void Translate(Vect3f trans_vector)
     {
         pos_ += trans_vector;
-        ref_mat_ = glm::translate(ref_mat_, glm::vec3(trans_vector[0], trans_vector[1], trans_vector[2]));
         UpdateViewMatrix_();
     }
 
@@ -84,7 +77,6 @@ private:
         view_mat_[3] = glm::vec4(pos_.glm()  , 1.0f);  // col 3
 
         PrintMatrix_(view_mat_, "View Matrix");
-        PrintMatrix_(ref_mat_, "Ref Matrix");
     }
 
     static void PrintMatrix_(const glm::mat4& mat, const std::string& msg)
@@ -98,11 +90,12 @@ private:
 
 
 private:
+
     Vect3f pos_;
     Vect3f cam_y_;
     Vect3f cam_z_;
+
     glm::mat4 view_mat_;
-    glm::mat4 ref_mat_;
 };
 
 #endif
