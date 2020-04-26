@@ -19,7 +19,7 @@
 typedef void (*WindowResizeCallback)(GLFWwindow* , int , int );
 
 // Function forward declarations
-void processInput(GLFWwindow* window);
+void processInput(GLFWwindow* window, World* world);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 GLFWwindow* initializeGLFW( unsigned int window_width, unsigned int window_height, const std::string& window_title, WindowResizeCallback callback);
 void RenderLoop( GLFWwindow* window, GLuint VAO, GLuint EBO, Shader& shader);
@@ -68,9 +68,13 @@ int main(int argc, char**argv)
     }
     glEnable(GL_DEPTH_TEST);  // Enable depth testing
 
+    World* the_world = World::GetPtr();
+    Camera& the_camera = the_world->GetCamera();
+    the_camera.Translate(Vect3f(0.0f, 0.0f, -3.0f));
+
     glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(rot_y), glm::vec3(1.0f, 0.0f, 0.0f));
     model = glm::rotate(model, glm::radians(rot_x), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 view = glm::translate(glm::mat4(1.0), glm::vec3(0.0f, 0.0f, z_trans));
+    glm::mat4 view = the_camera.GetViewMatrix();
     float fov_degree = 45.0f;
     glm::mat4 projection = glm::perspective(glm::radians(fov_degree), 800.0f/600.0f, 0.1f, 100.0f);
 
@@ -87,7 +91,6 @@ int main(int argc, char**argv)
     shader.setVec3("lightColor", lightColor);
 
     // Load mesh data
-    World* the_world = World::GetPtr();
     the_world->AddObject(BasicShapes::CreateCube2(0.5, glm::vec3(0.0f)));
     the_world->Print();
     const float* vertex_array      = the_world->GetVertexArrayPtr();
@@ -184,11 +187,14 @@ void RenderLoop(
         GLuint EBO,
         Shader& shader)
 {
+    World* the_world = World::GetPtr();
+    Camera& the_camera = the_world->GetCamera();
+
     // render loop
     while(!glfwWindowShouldClose(window))
     {
         // Check if any input was received from the user
-        processInput(window);
+        processInput(window, the_world);
 
         // Set background color.
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -200,7 +206,7 @@ void RenderLoop(
         // Update transformation matrix in shader
         glm::mat4 model = glm::rotate(glm::mat4(1.0), glm::radians(rot_y), glm::vec3(1.0f, 0.0f, 0.0f));
         model = glm::rotate(model, glm::radians(rot_x), glm::vec3(0.0f, 1.0f, 0.0f));
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, z_trans));
+        glm::mat4 view = the_camera.GetViewMatrix();
         shader.setMat4f("model", model);
         shader.setMat4f("view", view);
 
@@ -223,7 +229,9 @@ void RenderLoop(
 }
 
 // Callback : When a key is pressed
-void processInput(GLFWwindow* window)
+void processInput(
+        GLFWwindow* window,
+        World* the_world)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
@@ -251,13 +259,11 @@ void processInput(GLFWwindow* window)
     }
     else if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        z_trans += 0.1;
-        std::cout << "z_trans : " <<  z_trans << std::endl;
+        the_world->GetCamera().Translate(Vect3f(0.0f, 0.0f, 0.1f));
     }
     else if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        z_trans -= 0.1;
-        std::cout << "z_trans : " <<  z_trans << std::endl;
+        the_world->GetCamera().Translate(Vect3f(0.0f, 0.0f, -0.1f));
     }
 }
 
