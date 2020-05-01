@@ -19,10 +19,10 @@
 typedef void (*WindowResizeCallback)(GLFWwindow* , int , int );
 
 // Function forward declarations
-void processInput(GLFWwindow* window, World* world);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 GLFWwindow* initializeGLFW( unsigned int window_width, unsigned int window_height, const std::string& window_title, WindowResizeCallback callback);
 void RenderLoop( GLFWwindow* window, GLuint VAO, GLuint EBO, Shader& shader);
+void keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 const unsigned int SCR_WIDTH  = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -111,7 +111,7 @@ int main(int argc, char**argv)
     glBindBuffer(GL_ARRAY_BUFFER, VBO); 
     // Copy data to the buffer
     glBufferData(GL_ARRAY_BUFFER, vertex_array_size, vertex_array, GL_STATIC_DRAW);
-    
+
     GLuint vert_attribute_coord = 0;   
     GLuint vert_attribute_color = 1;  
     GLuint vert_attribute_norm  = 2;  
@@ -129,21 +129,21 @@ int main(int argc, char**argv)
 
     /* Create an element buffer object (EBO)
      */
-     GLuint EBO;
-     glGenBuffers(1, &EBO);
-     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-     glBufferData(GL_ELEMENT_ARRAY_BUFFER, tria_array_size, tria_array, GL_STATIC_DRAW);
+    GLuint EBO;
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, tria_array_size, tria_array, GL_STATIC_DRAW);
 
 
-     // Rendering loop
-     RenderLoop( window, VAO, EBO, shader);
+    // Rendering loop
+    RenderLoop( window, VAO, EBO, shader);
 
-     // Deallocate resources
-     glDeleteVertexArrays(1, &VAO);
-     glDeleteBuffers(1, &VBO);
-    
-     glfwTerminate();
-     return 0;
+    // Deallocate resources
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+
+    glfwTerminate();
+    return 0;
 }
 
 // Initializes a GLFW window.
@@ -172,6 +172,7 @@ GLFWwindow* initializeGLFW(
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, callback);
+    glfwSetKeyCallback(window, keyboard_callback);
     return window;
 }
 
@@ -189,8 +190,6 @@ void RenderLoop(
     while(!glfwWindowShouldClose(window))
     {
         // Check if any input was received from the user
-        processInput(window, the_world);
-
         // Set background color.
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -223,52 +222,45 @@ void RenderLoop(
     }
 }
 
-// Callback : When a key is pressed
-void processInput(
-        GLFWwindow* window,
-        World* the_world)
+void keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if(action == GLFW_PRESS || action == GLFW_REPEAT)
     {
-        glfwSetWindowShouldClose(window, true);
-    }
-    else if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-    {
-        the_world->Rotate(0.5, Vect3f(1.0, 0.0, 0.0));
-    }
-    else if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-    {
-        the_world->Rotate(-0.5, Vect3f(1.0, 0.0, 0.0));
-    }
-    else if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-    {
-        the_world->Rotate(0.5, Vect3f(0.0, 1.0, 0.0));
-    }
-    else if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-    {
-        the_world->Rotate(-0.5, Vect3f(0.0, 1.0, 0.0));
-    }
-    else if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        the_world->GetCamera().Translate(Vect3f(0.0f, 0.0f, 0.1f));
-    }
-    else if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        the_world->GetCamera().Translate(Vect3f(0.0f, 0.0f, -0.1f));
-    }
-    else if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        the_world->GetCamera().Translate(Vect3f(-0.1f, 0.0f, 0.0f));
-    }
-    else if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-    {
-        the_world->GetCamera().Translate(Vect3f(0.1f, 0.0f, 0.0f));
-    }
-    else if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
-    {
-        the_world->GetCamera().Reset();
-    }
-}
+        switch(key)
+        {
+            case GLFW_KEY_ESCAPE:
+                glfwSetWindowShouldClose(window, true);
+                break;
+            case GLFW_KEY_UP:
+                World::GetPtr()->Rotate(0.5, Vect3f(1.0, 0.0, 0.0));
+                break;
+            case GLFW_KEY_DOWN:
+                World::GetPtr()->Rotate(-0.5, Vect3f(1.0, 0.0, 0.0));
+                break;
+            case GLFW_KEY_LEFT:
+                World::GetPtr()->Rotate(0.5, Vect3f(0.0, 1.0, 0.0));
+                break;
+            case GLFW_KEY_RIGHT:
+                World::GetPtr()->Rotate(-0.5, Vect3f(0.0, 1.0, 0.0));
+                break;
+            case GLFW_KEY_A:
+                World::GetPtr()->GetCamera().Translate(Vect3f(0.0f, 0.0f, 0.1f));
+                break;
+            case GLFW_KEY_S:
+                World::GetPtr()->GetCamera().Translate(Vect3f(0.0f, 0.0f, -0.1f));
+                break;
+            case GLFW_KEY_D:
+                World::GetPtr()->GetCamera().Translate(Vect3f(-0.1f, 0.0f, 0.0f));
+                break;
+            case GLFW_KEY_F:
+                World::GetPtr()->GetCamera().Translate(Vect3f(0.1f, 0.0f, 0.0f));
+                break;
+            case GLFW_KEY_R:
+                World::GetPtr()->GetCamera().Reset();
+                break;
+        };
+    };
+};
 
 // Callback : When window is resized
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
