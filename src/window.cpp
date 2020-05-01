@@ -203,12 +203,11 @@ void RenderLoop(
         glm::mat4 view  = the_camera.GetViewMatrix();
         shader.setMat4f("model", model);
         shader.setMat4f("view", view);
-        shader.setVec3("viewing_pos", the_camera.GetPosition().glm());
+        shader.setVec3("viewPos_world", the_camera.GetPosition().glm());
 
 
-        //glm::vec3 lightPos( light_radius*glm::cos(glm::radians(light_angle)), light_radius*glm::sin(glm::radians(light_angle)), 0.0);
-        glm::vec3 lightPos( 0.0, light_radius*glm::cos(glm::radians(light_angle)), light_radius*glm::sin(glm::radians(light_angle)) );
-        shader.setVec3("lightPos", lightPos);
+        glm::vec3 lightPos_world( 0.0, light_radius*glm::cos(glm::radians(light_angle)), light_radius*glm::sin(glm::radians(light_angle)) );
+        shader.setVec3("lightPos_world", lightPos_world);
         light_angle += 1;
 
         // Draw elements
