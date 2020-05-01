@@ -70,8 +70,8 @@ int main(int argc, char**argv)
 
 
     // Load, compile and link shaders
-    const char* vshader_path = "/home/aakash/Code/opengl_experiment/shaders/with_light.vs";
-    const char* fshader_path = "/home/aakash/Code/opengl_experiment/shaders/with_light.fs";
+    const char* vshader_path = "/home/aakash/Code/opengl_experiment/shaders/with_light.vert";
+    const char* fshader_path = "/home/aakash/Code/opengl_experiment/shaders/with_light.frag";
     Shader shader(vshader_path, fshader_path);
     shader.use();
 
