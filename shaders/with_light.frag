@@ -22,16 +22,19 @@ void main()
     vec3 reflectDir_view  = reflect(-lightDir_view, normalize(vertexNormal_view));
 
     // Ambient
-    float ambientStrength = 0.4;
+    float ambientStrength = 0.2;
 
     // Diffuse
-    float diffuseStrength = max(dot(lightDir_view, normalize(vertexNormal_view)), 0.0);
+    float diffuseFactor  = 0.3;
+    float diffuseStrength = diffuseFactor * max(dot(lightDir_view, normalize(vertexNormal_view)), 0.0);
 
     // Specular
-    float specularFactor = 0.5f;
-    float spec = pow( max( dot(viewDir_view, reflectDir_view), 0.0), 32);
+    float specularFactor = 0.3;
+    float spec = pow( max( dot(viewDir_view, reflectDir_view), 0.0), 64);
     float specularStrength = specularFactor * spec;
 
+    //vec3 light = diffuseStrength  * lightColor;
+    //vec3 light = specularStrength * lightColor;
     vec3 light = (ambientStrength + diffuseStrength + specularStrength) * lightColor;
     FragColor = vec4(light * vertexColor, 1.0);
 }

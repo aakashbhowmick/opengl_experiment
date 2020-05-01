@@ -206,7 +206,8 @@ void RenderLoop(
         shader.setVec3("viewPos_world", the_camera.GetPosition().glm());
 
 
-        glm::vec3 lightPos_world( 0.0, light_radius*glm::cos(glm::radians(light_angle)), light_radius*glm::sin(glm::radians(light_angle)) );
+        //glm::vec3 lightPos_world( 0.0, light_radius*glm::cos(glm::radians(light_angle)), light_radius*glm::sin(glm::radians(light_angle)) );
+        glm::vec3 lightPos_world = the_camera.GetPosition().glm();
         shader.setVec3("lightPos_world", lightPos_world);
         light_angle += 1;
 

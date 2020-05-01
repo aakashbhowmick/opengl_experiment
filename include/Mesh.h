@@ -27,11 +27,6 @@ public:
     {
     }
 
-    const Vect3f& GetOrigin() const
-    {
-        return origin_;
-    }
-
     const std::vector<Vect3f>& GetVertices() const
     {
         return vertices_;

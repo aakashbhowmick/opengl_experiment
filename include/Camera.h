@@ -13,7 +13,7 @@ class Camera
 public:
 
     Camera():
-        pos_{0.0f, 0.0f, 0.0f},
+        pos_world_{0.0f, 0.0f, 0.0f},
         cam_y_{0.0f, 1.0f, 0.0f},
         cam_z_{0.0f, 0.0f, 1.0f}
     {
@@ -24,7 +24,7 @@ public:
     const Vect3f& position,
     const Vect3f& view_direction,
     const Vect3f& up_direction):
-        pos_{position},
+        pos_world_{position},
         cam_z_{view_direction * -1.0f},
         cam_y_{up_direction}
     {
@@ -35,7 +35,7 @@ public:
 
     Vect3f GetPosition() const
     {
-        return pos_;
+        return pos_world_;
     }
 
     Vect3f GetViewingDirection() const
@@ -55,7 +55,7 @@ public:
 
     void Translate(Vect3f trans_vector)
     {
-        pos_ += trans_vector;
+        pos_world_ += trans_vector;
         UpdateViewMatrix_();
     }
 
@@ -72,7 +72,7 @@ private:
         view_mat_[0] = glm::vec4(cam_x_.glm(), 0.0f);  // col 0
         view_mat_[1] = glm::vec4(cam_y_.glm(), 0.0f);  // col 1
         view_mat_[2] = glm::vec4(cam_z_.glm(), 0.0f);  // col 2
-        view_mat_[3] = glm::vec4(pos_.glm()  , 1.0f);  // col 3
+        view_mat_[3] = glm::vec4(pos_world_.glm()  , 1.0f);  // col 3
 
         PrintMatrix_(view_mat_, "View Matrix");
     }
@@ -89,7 +89,7 @@ private:
 
 private:
 
-    Vect3f pos_;
+    Vect3f pos_world_;
     Vect3f cam_y_;
     Vect3f cam_z_;
 
