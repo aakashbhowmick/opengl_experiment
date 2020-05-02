@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 /* In this file, we hand construct the transformation matrices.
  * Since the aim of this project is to learn the fundamentals of
@@ -14,11 +15,11 @@ class Transformations
 {
 public:
 
-    static glm::mat4 perspective_projection(
-                    double fov_degrees,      // field of view in degrees
-                    double ar,               // aspect ratio (width/height) of frustum
-                    double d_near,
-                    double d_far)
+    static glm::mat4 PerspectiveProjection(
+                      float fov_degrees,      // field of view in degrees
+                      float ar,               // aspect ratio (width/height) of frustum
+                      float d_near,
+                      float d_far)
     {
 
         /**
@@ -55,9 +56,12 @@ public:
          *
          */                            
         
+        // TODO: Implement on your own
+        return glm::perspective(glm::radians(fov_degrees), ar, d_near, d_far);
+
 
     };
-}
+};
 
 
 #endif

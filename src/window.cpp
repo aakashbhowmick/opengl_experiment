@@ -15,6 +15,7 @@
 #include <Mesh.h>
 #include <Shader.h>
 #include <BasicShapes.h>
+#include <Transformations.h>
 
 typedef void (*WindowResizeCallback)(GLFWwindow* , int , int );
 
@@ -78,7 +79,7 @@ int main(int argc, char**argv)
     shader.use();
 
     float fov_degree = 45.0f;
-    glm::mat4 projection = glm::perspective(glm::radians(fov_degree), 800.0f/600.0f, 0.1f, 100.0f);
+    glm::mat4 projection = Transformations::PerspectiveProjection(fov_degree, 800.0f/600.0f, 0.1f, 100.0f);
     shader.setMat4f("model", glm::mat4(1.0f));
     shader.setMat4f("view", glm::mat4(1.0f));
     shader.setMat4f("projection", projection);
