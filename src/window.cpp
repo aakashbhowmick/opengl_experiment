@@ -23,6 +23,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 GLFWwindow* initializeGLFW( unsigned int window_width, unsigned int window_height, const std::string& window_title, WindowResizeCallback callback);
 void RenderLoop( GLFWwindow* window, GLuint VAO, GLuint EBO, Shader& shader);
 void keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 
 const unsigned int SCR_WIDTH  = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -173,6 +175,8 @@ GLFWwindow* initializeGLFW(
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, callback);
     glfwSetKeyCallback(window, keyboard_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetCursorPosCallback(window, cursor_position_callback);
     return window;
 }
 
@@ -260,6 +264,39 @@ void keyboard_callback(GLFWwindow* window, int key, int scancode, int action, in
                 break;
         };
     };
+};
+
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    std::cout << "Mouse x:" << xpos << " y:" << ypos << std::endl;
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if(action == GLFW_PRESS)
+    {
+        switch(button)
+        {
+            case GLFW_MOUSE_BUTTON_RIGHT:
+            std::cout << "Right button press" << std::endl;
+            break;
+            case GLFW_MOUSE_BUTTON_LEFT:
+            std::cout << "Left button press" << std::endl;
+            break;
+        };
+    }
+    else if(action == GLFW_RELEASE)
+    {
+        switch(button)
+        {
+            case GLFW_MOUSE_BUTTON_RIGHT:
+            std::cout << "Right button release" << std::endl;
+            break;
+            case GLFW_MOUSE_BUTTON_LEFT:
+            std::cout << "Left button release" << std::endl;
+            break;
+        };
+    }
 };
 
 // Callback : When window is resized
