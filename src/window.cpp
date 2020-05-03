@@ -79,8 +79,8 @@ int main(int argc, char**argv)
     shader.use();
 
     float fov_degree = 45.0f;
-    glm::mat4 projection = Transformations::PerspectiveProjection(fov_degree, 800.0f/600.0f, 0.1f, 100.0f);
-    //glm::mat4 projection = Transformations::OrthographicProjection(-1.0f, 1.0f, -1.0f, 1.0f, -5.0f, 5.0f);
+    //glm::mat4 projection = Transformations::PerspectiveProjection(fov_degree, 800.0f/600.0f, 0.1f, 100.0f);
+    glm::mat4 projection = Transformations::OrthographicProjection(-1.0f, 1.0f, -1.0f, 1.0f, -5.0f, 5.0f);
     glm::mat4 proj_inv   = glm::inverse(projection);
     shader.setMat4f("model", glm::mat4(1.0f));
     shader.setMat4f("view", glm::mat4(1.0f));
