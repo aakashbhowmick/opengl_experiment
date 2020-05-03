@@ -61,6 +61,17 @@ public:
 
 
     };
+
+    static glm::mat4 OrthographicProjection(
+                      float left,
+                      float right,
+                      float top,
+                      float bottom,
+                      float near,
+                      float far)
+    {
+        return glm::ortho(left, right, top, bottom, near, far);
+    }
 };
 
 
